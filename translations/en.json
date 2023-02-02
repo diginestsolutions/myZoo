@@ -1,0 +1,454 @@
+{
+    
+    "Login" : {
+        "welcome" : "Welcome Back!",
+        "signInYrAcc" : "Sign into your account.",
+        "emailOrPh" : "Email/phone number",
+        "pswd" : "Password",
+        "fgtPswd" : "Forgot password?",
+        "signIn" : "Sign in",
+        "or" : "Or",
+        "signGoogle" : "Sign in with Google",
+        "signFb" : "Sign in with Facebook",
+        "signTwitter" : "Sign in with Twitter",
+        "dntHaveAcc" : "Don’t have an account?",
+        "sgnUpHere" : "Signup here"
+    },
+    "SignUp" : {
+        "signUp" : "Sign Up",
+        "letsCrtAcc" : "Let’s create an account for you",
+        "name" : "Name",
+        "phNo" : "Phone Number",
+        "EmailAddr" : "Email Address",
+        "pswd" : "Password",
+        "cnfrmPswd" : "Confirm Password",
+        "agreeTrmsCndtn" : "I agree with terms of use, privacy policy and other conditions.",
+        "snUp" : "Sign Up",
+        "alrdyAcc" : "Already have an account?",
+        "lgHere" : "Login here"
+    },
+    "ForgotPassword" : {
+        "frgtPswd" : "Forgot Password?",
+        "provideEmail" : "Please provide your MyZoo registered email address to reset your password.",
+        "emailAddr" : "Email Address",
+        "getOtp" : "Get OTP"
+    },
+    "OtpVerification" : {
+        "otpVer" : "OTP Verification",
+        "enterOtp" : "Enter the OTP just sent to your email or number",
+        "didntReceiv" : "Didn't receive a OTP ?",
+        "resend" : " Resend",
+        "verify" : "Verify"
+    },
+    "ResetPassword" : {
+        "rstpswd" : "Reset Password",
+        "enterNewPaswd" : "Enter the new password and let's being extra safe",
+        "newPswd" : "New Password",
+        "cnfrmPswd" : "Confirm Password",
+        "done" : "Submit"
+    },
+    "Dashboard" : {
+        "search" :"Search for pets, accessories and services",
+
+        "pet" : "Pets",
+        "acc" : "Accessories",
+        "serv" : "Services",
+        "myZooPcs" : "Myzoo Picks",
+
+        "mzPicks" : "Myzoo Picks",
+        "pets" : "Pets",
+        "ser" : "Services",
+        "vend" : "Vendors",
+
+        "coming" : "Coming Soon"
+    }, 
+
+    "BrowseCategories" : {
+        "browCat" :"Browse Categories",
+        "pet" : "PETS",
+        "Accessories" : "ACCESSORIES",
+        "serv" : "SERVICES"
+    }, 
+
+    "ProductDetails" : {
+        "buyfor" :"Buy for",
+        "callwithsell" :"Call with Seller",
+        "chatwithsell" :"Chat with Seller",
+        "crntBid" :"Current Bid:",
+        "forAuct" : "For auction",
+        "forSale" : "For sale",
+        "age" :"Age",
+        "weight" : "Weight",
+        "size" : "Size",
+        "sex" : "Sex",
+        "abtPet" : "About Pet",
+        "specs" :"Specifications",
+        "cat" : "Category",
+        "type" : "Type",
+        "city" : "City",
+        "zip" : "Zip Code",
+        "breed" : "Breed",
+        "country" : "Country",
+        "price" : "Price",
+        "gender" : "Gender",
+
+        "color" : "Color",
+        "chatWthSeller" : "Chat with seller",
+        "bidNow" : "Bid Now",
+        "addCart" :"Add Cart",
+        "buyNow" : "Buy Now",
+        "recentPost" : "Recent post",
+        "recentpetPost" : "Recent pet posts",
+        "revRateItem" : "Review and rate item",
+        "wrYrRevHere" : "Write your review here",
+        "subFed" : "Submit Feedback"
+    }, 
+
+    "Drawer" : {
+        "mOrder" :"My Order",
+        "mWishlist" : "My Wishlist",
+        "mFav" : "My Favourites",
+        "mBid" : "My Bidding",
+        "mItemLst" : "My Items List",
+        "mCompLst" : "My Compare List",
+        "mMemShpPln" : "My Membership & Plans",
+        "currency" : "Currency",
+        "lang" : "Language",
+        "faq" : "FAQs",
+        "contact" : "Contact Us",
+        "profile" : "Profile",
+        "termsNprivacy" : "Terms and Privacy Policy",
+        "abtApp" : "About App",
+        "signOut" : "Sign Out",
+        "signin": "Sign in"
+    }, 
+
+    "MyOrders" : {
+        "myOrders" :"My Orders",
+        "trackItem" : "Track Item",
+        "viewOrdDet" : "View order details"
+    },
+
+    "TrackItem" : {
+        "track" :"Track Item",
+        "shpAddr" : "Shipping Address",
+        "ordinfo" : "Order Info"
+    },
+
+    "ViewOrderDetails" : {
+        "viewOrdDet" :"View order details",
+        "ordDate" :"Order Date",
+        "ord" :"Order #",
+        "ordTot" :"Order total",
+        "dwnInv" : "Download Invoice",
+
+        "shpmntDet" : "Shipment details",
+        "preForDes" :"Preparing for Dispatch",
+        "estDel" : "Item Delivery Estimate",
+        "itemName" : "Item name",
+        "qty" : "Qty:",
+        "by" : "by",
+        "trkShpmnt" : "Track Shipment",
+
+        "paymntInfo" : "Payment information",
+        "paymntMeth" : "Payment Method",
+        "BilAddr" : "Billing Address",
+
+
+        "shpngAddr" : "Shipping Address",
+
+        "ordSmmry" : "Order Summary",
+        "item" : "Item:",
+        "del" : "Delivery:",
+        "totBefVat" : "Total Before Vat:",
+        "vat" : "Vat:",
+        "total" : "Total:",
+        "ordTotal" : "Order Total:",
+
+        "levSelFedbk" : "Leave seller feedback",
+        "levDelFedbk" : "Leave delivery feedback",
+        "wrPdtRevw" : "Write a product review",
+        "retReq" : "Request return"
+    },
+
+    "LeaveSellerFeedback" : {
+        "abtSeller" :"About Seller",
+        "itemSale" : "Item for sale",
+        "popSellers" : "Popular Sellers",
+        "revRateItem" : "Review and rate item",
+        "wrYrRevHere" : "Write your review here",
+        "useDefName" : "Use a different name",
+        "subFed" : "Submit Feedback"
+    },
+
+    "DeliveryFeedback" : {
+        "delFed" :"Delivery Feedback",
+        "rateYrDelExp" : "Rate your delivery experience",
+        "pleaseEntCmt" : "Please enter comments here about your experience",
+        "useDefName" : "Use a different name",
+        "subFed" : "Submit Feedback"
+    },
+
+    "ItemReviews" : {
+        "itmRev" :"Item reviews",
+        "ovrRat" : "Overall rating",
+        "addPhotoNvid" : "Add a photo or video",
+        "shopFndImgNvid" : "Shoppers find images and videos more helpful than text alone.",
+        "addImg" : "Add Image(s)",
+
+        "addHdLne" : "Add a headline",
+        "wrtYrReview" : "Write your review",
+        "whtDidYou" : "What did you like or dislike? what did you use this product for?",
+
+        "useDefName" : "Use a different name",
+        "subFed" : "Submit Feedback"
+    },
+
+    "RequestReturn" : {
+        "reqRet" :"Request Return",
+        "reason" : "Reason for your return",
+        "chooseRes" : "Choose your reason",
+        "wrtCmt" : "Write your comment",
+        "wrtYrRsn" : "Write your reason",
+        "proRet" : "Proceed to Return"
+    },
+
+    "MyWishlist" : {
+        "mWish" :"My Wishlist"
+    },
+
+    "MyFavourites" : {
+        "mFav" :"My Favourites"
+    },
+
+    "MyBidding" : {
+        "mBidding" :"My Bidding",
+        "mBid" :"My Bid :",
+        "placeNewBid" :"Place New Bid"
+    },
+
+    "BidForItem" : {
+        "bidForItm" :"Bid for item",
+        "crntBid" :"Current Bid",
+        "bids" :"Bids",
+        "entYrBid" :"Enter your bid",
+        "placeBid" :"Place Bid",
+        "allBids" :"All Bids"
+    },
+
+    "MyItemsList" : {
+        "mItemLst" :"My Items List"
+    },
+
+    "CompareItems" : {
+        "compItms" :"Compare Items",
+        "allTheDiff" :"All the difference have been highlighted, making it easy for, you to pick the product that bests suits your needs!",
+        "custRat" :"Customer Rating",
+        "price" :"Price",
+        "cat" :"Category",
+        "breed" :"Breed",
+        "gen" :"Gender",
+        "age" :"Age",
+        "weight" :"Weight",
+        "sellNme" :"Seller Name",
+        "loc" :"Location",
+        "viewDet" :"View Details",
+        "del" :"Delete"
+    },
+
+    "MyMembershipPlans" : {
+        "mMemShpNPlan" :"My Membership & Plans"
+    },
+
+    "SelectCurrency" : {
+        "selCur" :"Select Currency"
+    },
+
+    "FAQs" : {
+        "faq" :"FAQs"
+    },
+
+    "ContactUs" : {
+        "contUs" :"Contact Us",
+        "areUExp" :"Are you experiencing any troubles using MyZoo, please feel free to reach out to us via any of the mediums below.",
+        "fileComplnt" :"File a complaint",
+        "email" :"E-Mail",
+        "name" :"Name",
+        "note" :"Note",
+        "submit" :"SUBMIT"
+    },
+
+    "TermsPrivacyPolicy" : {
+        "termsNprPol" :"Terms and Privacy Policy"
+    },
+
+    "AboutUs" : {
+        "abtUs" :"About Us"
+    },
+
+    "Messages" : {
+        "msg" :"Messages"
+    },
+
+    "Profile" : {
+        "profile" :"Profile",
+        "editProfile" :"Edit Profile",
+        "delAddr" :"Delivery Address",
+        "changePswd" :"Change Password",
+        "pubPro" :"Public Profile",
+        "faq" : "FAQs",
+        "contact" : "Contact Us",
+        "termsNprivacy" : "Terms and Privacy Policy",
+        "abtApp" : "About App"
+    },
+
+    "EditProfile" : {
+        "editPro" :"Edit Profile",
+        "firstName" :"First Name",
+        "lastName" :"Last Name",
+        "phNo" :"Phone Number",
+        "email" :"E-Mail",
+        "address" : "Address",
+        "city" : "City",
+        "posCode" : "Postal Code",
+        "countryOrReg" : "Country/Region",
+        "fb" : "Facebook",
+        "twitter" : "Twitter",
+        "abtMe" : "About Me",
+        "updateProfile" : "Update Profile"
+    },
+
+    "DeliveryAddress" : {
+        "deliveryAddr" :"Delivery Address",
+        "addNewAddr" :"Add a new address",
+        "makedef" :"Make as default",
+        "editAddr" :"Edit address",
+        "delAddr" :"Delete address"
+    },
+
+    "EditAddress" : {
+        "editAddr" :"Edit Address",
+        "countryOrReg" :"Country/Region",
+        "fullName" :"Full Name",
+        "mobNo" :"Mobile number",
+        "zip" :"Zip Code",
+        "houseName" :"House Name",
+        "houseNo" :"HouseNo",
+        "areaCol" :"Area, Colony, Street, Sector, Village",
+        "landmark" :"Landmark",
+        "twnOrCty" :"Town/City",
+        "stateProReg" :"State/Province/Region",
+        "addrType" :"Address Type",
+        "updateAddr" :"UPDATE ADDRESS"
+    },
+
+    "ChangePassword" : {
+        "changePswd" :"Change Password",
+        "EntCrntPawd" :"Enter Current Password",
+        "crntPswd" :"Current Password",
+        "newPswd" :"New Password",
+        "enterNewPaswd" :"Enter New Password",
+        "reEntPwsd" :"Re-enter New Password",
+        "reEntNewPwsd" :"Re-enter Password",
+        "submit" :"SUBMIT"
+    },
+
+    "Public Profile" : {
+        "pubPro" :"Public Profile",
+        "fullName" :"Full Name",
+        "updateProfile" :"Update Profile"
+    },
+
+    "MyCart" : {
+        "mCart" :"My Cart",
+        "itemInCart" :"Item in cart",
+        "trmsCndtn" :"TERMS & CONDITIONS",
+        "allTheDiffHave" :"All the difference have been highlighted, making it easy for, you to pick the product that bests suits your needs, All the difference have been highlighted, making it easy for making it easy for, you to pick the product that bests suits your needs!",
+        "del" :"Delete",
+        "moveToWshlst" :"Move to wish list",
+        "checkout" :"Checkout"
+    },
+
+    "Checkout" : {
+        "checkout" :"Checkout",
+        "selAShpAddr" :"Select a shipping address",
+        "delToThisAddr" :"Deliver to this address",
+        "editAddr" :"Edit address",
+        "addNewAddr" :"Add a new address"
+    },
+
+    "Filter" : {
+        "filterYrSrch" :"Filter your search",
+        "chooseType" :"Choose a type",
+        "priceRange" :"Price Range",
+        "choseCat" :"Choose a Category",
+        "ageRange" :"Age Range",
+        "WtRange" :"Weight Range",
+        "applyFilter" :"Apply Filter"
+    },
+
+    "PostNewItem" : {
+        "postNwItem" :"Post new item",
+        "imgVdo" :"Images & Videos",
+        "addImg" :"Add Image(s)",
+        "youCanAddImg" :"(You can add up to 3 images)",
+        "selectCat" :"Select Category",
+        "selectsubCat" :"Select Subcategory",
+        "title" :"Title",
+        "subTitle" :"Subtitle",
+        "Name": "Name",
+        "description" :"Description",
+
+
+        "selectGen" :"Select Gender",
+        "age" :"Age",
+        "selectAgeType" :"Select Age Type",
+        "selWeightTyp" :"Select Weight Type",
+        "weight" :"Weight",
+
+        "size" :"Size",
+        "selSizTyp" :"Select Size Type",
+
+        "color" :"Color",
+        "zip" :"Zip Code",
+        "selling" :"Selling",
+        "bidding" :"Bidding",
+        "price" :"Price",
+        "Bprice" :"Base Price",
+        "Fprice" :"Final Price",
+
+
+        "abtPet" :"About Pet",
+        "postItem" :"POST ITEM",
+        "edit": "Edit Item"
+    },
+
+    "CreateAccessory" : {
+        "createAcc" :"Create Accessory",
+        "selectAccType" :"Select Accessories Type",
+        "acc" :"Accessory Name",
+        "color" :"Color",
+        "quantity" :"Quantity",
+        "zip" :"Zip Code",
+        "price" :"Price",
+        "abtAcc" :"About Accessory",
+        "postItem" :"POST ITEM"
+    },
+
+    "CreateService" : {
+        "createSer" :"Create Service",
+        "selectSerType" :"Select Service Type",
+        "selectCat" :"Select Category",
+        "zip" :"Zip Code",
+        "description" :"Email/phone Number Description",
+        "metaTitle" :"Meta Title",
+        "metaKey" :"Meta Keyword",
+        "postItem" :"POST ITEM",
+        "serName" :"Service Name",
+        "catName" :"Category Name",
+        "price": "Price"
+
+
+    }
+
+}

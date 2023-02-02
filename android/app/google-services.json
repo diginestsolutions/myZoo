@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "320961589099",
+    "project_id": "my-zoo-339115",
+    "storage_bucket": "my-zoo-339115.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:320961589099:android:70cb156005f3a41d2a262e",
+        "android_client_info": {
+          "package_name": "com.myzoo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "320961589099-avg2c8qdc4rdilr0hnot6vdicdt1u8qk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4AjGHZH9p2H0cDiYREuW3Ou90wVG7gQ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "320961589099-avg2c8qdc4rdilr0hnot6vdicdt1u8qk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "320961589099-fhkat2aok4t4o54v2iv3dcvd4feqnd8f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nolwa.myzoo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

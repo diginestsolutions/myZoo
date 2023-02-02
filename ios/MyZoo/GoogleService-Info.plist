@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>320961589099-fg9cdq8m0f7ii656lkje9fl04no3vp9n.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.320961589099-fg9cdq8m0f7ii656lkje9fl04no3vp9n</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>320961589099-fggurotqkee4qgl0r61qm0a9mk9ki095.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAWK0Nzz_ao7fOmUCWSwLuJa2VtypzA-iQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>320961589099</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.diginest.myzoo</string>
+	<key>PROJECT_ID</key>
+	<string>my-zoo-339115</string>
+	<key>STORAGE_BUCKET</key>
+	<string>my-zoo-339115.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:320961589099:ios:281bc5d459041f602a262e</string>
+</dict>
+</plist>
