@@ -25,7 +25,7 @@ const MyItemCard = ({item}) => {
             id: item?._id,
         }
         dispatch(getProductById(data))
-        navigation.navigate('ProductDetails');
+        //navigation.navigate('ProductDetails');
     }
   return (
     <Pressable onPress={makeActiveProduct}>

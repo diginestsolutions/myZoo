@@ -4,7 +4,7 @@ import { Box, CheckIcon, Center, Select, Text } from 'native-base'
 import { Controller } from "react-hook-form";
 
 
-const SelectNew = ({placeholder, options, optlabel, optValue, mt, borderColor, textColor, control, fieldName, error, changeValue, defaultValue}) => {
+const SelectNew = ({placeholder, options, optlabel, optValue, mt, borderColor, textColor, control, fieldName, error, changeValue, defaultValue, selectedValue}) => {
     return (
         <Center mt={mt}>
             <Box w="100%">
@@ -14,7 +14,7 @@ const SelectNew = ({placeholder, options, optlabel, optValue, mt, borderColor, t
                 rules={{ required: true }}
                 render={({field:  {onChange, value} }) => <Select 
                     defaultValue={defaultValue}
-                    selectedValue={value}
+                    selectedValue={selectedValue ? selectedValue : value}
                     borderColor={borderColor}
                     mt={1}
                     accessibilityLabel={placeholder}

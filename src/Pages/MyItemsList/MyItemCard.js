@@ -1,18 +1,21 @@
 import { StyleSheet, ImageBackground } from 'react-native'
 import React from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { Box, HStack, Actionsheet, Text, Icon, Pressable, useDisclose, Button } from 'native-base'
+import { Box, HStack, Actionsheet, Text, Icon, Pressable, useDisclose, Button, useToast } from 'native-base'
 
 import Favourite from '../../Components/Favourite'
-import { RESET_PRODUCT } from '../../Redux/constants/homeConstant'
+import { LOADING, RESET_PRODUCT } from '../../Redux/constants/homeConstant'
 import { getProductById } from '../../Redux/actions/homeAction'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { IMAGE_URL } from '../../config/Constants'
 import moment from 'moment'
+import customAxios from '../../CustomAxios'
 
 
 const MyItemCard = ({ item }) => {
+
+    const toast = useToast()
 
     const {
         isOpen,
@@ -28,9 +31,38 @@ const MyItemCard = ({ item }) => {
         navigation.navigate('ProductDetails', { id: item?._id });
     }
 
-    const editItems = () => {
+    const editItems = async() => {
+        dispatch({
+            type: LOADING,
+            payload: true
+        })
         onClose()
-        navigation.navigate("EditPost", { item: item })
+        //navigation.navigate("EditPost", { item: item })
+        let data = {
+            id: item?._id
+        }
+        await customAxios.post(`Front_End/Mob_products/_getproductbyIds`, data)  
+        .then(async response => {
+            navigation.navigate("EditPost", { item: response?.data })
+
+            dispatch({
+                type: LOADING,
+                payload: false
+            })
+        })
+        .catch(async error => {
+
+            toast.show({
+                title: 'Error',
+                description: error,
+                backgroundColor: 'error.500'
+            })
+
+            dispatch({
+                type: LOADING,
+                payload: false
+            })
+        });
     }
 
     return (

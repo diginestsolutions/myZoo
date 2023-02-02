@@ -29,6 +29,8 @@ import axios from 'axios';
 import { API_URL } from '../../config/Constants';
 import SelectNew from '../../Components/SelectNew';
 import SwitchInput from '../../Components/SwitchInput';
+import { countriesList } from '../../Redux/actions/authAction';
+import { AUTH_INPUT } from '../../Redux/constants/authConstant';
 
 
 let colorList = [
@@ -46,7 +48,13 @@ let colorList = [
 
 const EditItem = ({navigation, route}) => {
 
-    const { NoOfImage, NoOfVideo, ImageSize, VideoSize, VideoTime, MyZooPick, item  } = route.params
+    const { item  } = route.params
+    const [NoOfImage, setNoOfImage] = useState(0)
+    const [NoOfVideo, setNoOfVideo] = useState(0)
+    const [ImageSize, setImageSize] = useState(0)
+    const [VideoSize, setVideoSize] = useState(0)
+    const [VideoTime, setVideoTime] = useState(0)
+    const [MyZooPick, setMyZooPick] = useState(false)
 
     reactotron.log({item})
 
@@ -63,8 +71,7 @@ const EditItem = ({navigation, route}) => {
     const [sizeTypeList, setSizeTypeList] = useState([])
 
     const { savePet, loading, error } = useSelector(state => state.myItems)
-    const { selectedCountry, userData } = useSelector(state => state.auth)
-    const { stateList } = useSelector(state => state.settings)
+    const { selectedCountry, userData, countryList } = useSelector(state => state.auth)
     const { latestPets } = useSelector(state => state.home)
 
 
@@ -86,6 +93,15 @@ const EditItem = ({navigation, route}) => {
 
 
     const [catId, setCatId] = useState("")
+    const [subCategoryId, setSubCategoryId] = useState("")
+    const [gender, setGender] = useState("")
+    const [color, setColor] = useState("")
+    const [ageTypeId, setAgeTypeId] = useState("")
+    const [weightTypeId, setWeightTypeId] = useState("")
+    const [sizeTypeId, setSizeTypeId] = useState('')
+    const [stateId, setStateId] = useState('')
+    const [stateList, setStateList] = useState([])
+
 
 
 
@@ -193,13 +209,82 @@ const EditItem = ({navigation, route}) => {
 
 
     useEffect(() => {
-        if(selectedCountry?._id){
-            let data={
-                Country: selectedCountry?._id
+      if(item){
+        setValue("SubCategory", item?.SubCategory)
+        setValue("gender", item?.Gender)
+        setGender(item?.Gender)
+        setValue("Name", item?.Name)
+        setValue("color", item?.Color)
+        setColor(item?.Color)
+        setValue("Age", `${item?.Age}`)
+        setValue("Weight", `${item?.Weight}`)
+        setValue("Size", `${item?.Size}`)
+        setValue("PostalCode", `${item?.PostalCode}`)
+        setValue("Price", item?.Price.replace("SR", ""))
+        setValue("MetaDescription", item?.Description)
+        setSaleType(item?.SellingMode)
+        setBidByType(item?.BidType)
+        setDate(new Date(item?.EndDate))
+      }
+    }, [item])
+
+
+    useEffect(() => {
+        if(countryList){
+            let selectedCountry = countryList?.find(country => country?._id === item?.Country)
+            if(selectedCountry){
+                dispatch({
+                    type: AUTH_INPUT,
+                    payload: {
+                        prop: 'selectedCountry',
+                        value: selectedCountry
+                    }
+                })
             }
-            dispatch(getStateList(data))
+        }
+    }, [countryList])
+    
+    
+
+
+    useEffect(() => {
+        if(selectedCountry?._id){
+            getStateList()
         }
     }, [selectedCountry?._id])
+
+
+    const getStateList = async() => {
+        let data={
+            Country: selectedCountry?._id
+        }
+        await customAxios.post(`admin/states/listStateWithCountryId`,data)  
+        .then(async response => {
+            let states = response?.data?.find(state => state?._id === item?.City)
+            setStateList(response.data)
+            if(states){
+                setStateId(states?._id)
+                setValue("stateId", states?._id)
+            }
+            dispatch({
+                type: LOADING,
+                payload: false
+            })
+           
+        })
+        .catch(async error => {
+    
+            dispatch({
+                type: STATE_LIST_FAIL,
+                payload: error
+            })
+    
+            dispatch({
+                type: LOADING,
+                payload: false
+            })
+        });
+    }
 
 
     useEffect(() => {
@@ -227,6 +312,11 @@ const EditItem = ({navigation, route}) => {
         })
         await customAxios.post(`admin/pets/_loadSizeType`)  
         .then(async response => {
+            let sizeType = response.data?.find(size => size?.Text === item?.sizetype?.[0]?.Type)
+            if(sizeType){
+                setSizeTypeId(sizeType?._id)
+                setValue("sizeTypeId", sizeType?._id)
+            }
             setSizeTypeList(response.data)
             dispatch({
                 type: LOADING,
@@ -256,6 +346,11 @@ const EditItem = ({navigation, route}) => {
         await customAxios.post(`admin/pets/_loadWeightType`)  
         .then(async response => {
             setWeightTypeList(response.data)
+            let weights = response?.data?.find(weight => weight?.Type === item?.weighttype?.[0]?.Type)
+            if(weights){
+                setWeightTypeId(weights?._id)
+                setValue("weightTypeId", weights?._id)
+            }
             dispatch({
                 type: LOADING,
                 payload: false
@@ -285,7 +380,13 @@ const EditItem = ({navigation, route}) => {
         await customAxios.post(`admin/pets/_loadAgeType`)  
         .then(async response => {
 
+            let ageType = response?.data?.find(age => age.Text === item?.agetype?.[0]?.Type)
+
             setAgeTypeList(response.data)
+            if(ageType){
+                setValue("ageTypeId", ageType?._id)
+                setAgeTypeId(ageType?._id)
+            }
             dispatch({
                 type: LOADING,
                 payload: false
@@ -308,9 +409,63 @@ const EditItem = ({navigation, route}) => {
     
 
     useEffect(() => {
-        
+        dispatch(countriesList())
         getAllCategories()
     }, [])
+
+
+    const getPlanDetails = async() => {
+        let data = {
+            "UserId": userData.id
+        }
+        await customAxios.post(`user/membership/_plandetails`, data)  
+        .then(async response => {
+
+            let details = response?.data?.data;
+
+            if(details?.membership_status === true){
+                let petLimit = toNumber(details?.PetLimit);
+                let uploadedLimit = details.uploaded
+                if(petLimit <= uploadedLimit){
+                    //Limit Exceeds
+                    //navigation.navigate("memberWarning", { item: details })
+                    setShowAlert(true)
+
+                }
+                else{
+                    setNoOfImage(parseInt(details?.NoOfImage)-item?.Images?.length);
+                    setNoOfVideo(parseInt(details?.NoOfVideo)-item?.Videos?.length);
+                    setImageSize(parseFloat(details?.ImageSize)*1000000);
+                    setVideoSize(parseFloat(details?.VideoSize)*1000000);
+                    setVideoTime(parseFloat(details?.VideoTime));
+                    setMyZooPick(details?.Eligibleformyzoo ? true : false );
+                }
+                
+            }
+            else{
+                navigation.navigate("MyMembershipPlans")
+            }
+            dispatch({
+                type: LOADING,
+                payload: false
+            })
+            
+        })
+        .catch(async error => {
+    
+            toast.show({
+                title: 'Error',
+                description: error,
+                backgroundColor: 'error.400'
+            })
+            dispatch({
+                type: LOADING,
+                payload: false
+            })
+    
+           
+        });
+    }
 
 
     const getAllCategories = async() => {
@@ -326,14 +481,8 @@ const EditItem = ({navigation, route}) => {
         .then(async response => {
             setCategoryList(response.data)
 
-            let cat = response?.data?.find(re => re?.CategoryName === item?.cat?.[0]?.CategoryName)
-
-            reactotron.log({cat})
-
-            if(cat){
-                setCatId(cat?._id)
-                setValue("CategoryName", cat?._id)
-            }
+            setCatId(item?.Category)
+            setValue("CategoryName", item?.Category)
 
             //setCatId(item?.)
     
@@ -378,7 +527,7 @@ const EditItem = ({navigation, route}) => {
         await customAxios.post(`productManage/subcategory/list`, data)  
         .then(async response => {
             setSubCategoryList(response.data)
-    
+            setSubCategoryId(item?.SubCategory)
             dispatch({
                 type: LOADING,
                 payload: false
@@ -452,6 +601,7 @@ const EditItem = ({navigation, route}) => {
         
 
         let datas = {
+            _id: item?._id,
             Videos: videoArray,
             Images: imagesArray,
             ImageAlt: data.Name,
@@ -665,7 +815,7 @@ const EditItem = ({navigation, route}) => {
             <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
                 <Box p={3}>
                     
-                    <AddImage onPress={ChoosePhotoFromLibrary} image={image} video={video} NoOfImage={NoOfImage} NoOfVideo={NoOfVideo} />
+                    <AddImage onPress={ChoosePhotoFromLibrary} imageArray={item?.Images} image={image} video={video} NoOfImage={NoOfImage} NoOfVideo={NoOfVideo} />
                     <SelectNew 
                         placeholder={t("PostNewItem.selectCat")}
                         options={categoryList}
@@ -674,9 +824,11 @@ const EditItem = ({navigation, route}) => {
                         control={control}
                         fieldName="CategoryName"
                         error={errors.CategoryName}
+                        selectedValue={catId}
                         changeValue={(value) => {
                             setCatId(value)
                         } }
+                        
                         //defaultValue={catId}
                         
                     />
@@ -688,6 +840,10 @@ const EditItem = ({navigation, route}) => {
                         control={control}
                         fieldName="SubCategory"
                         error={errors.SubCategory}
+                        selectedValue={subCategoryId}
+                        changeValue={(value) => {
+                            setCatId(value)
+                        } }
                     />
                     <SelectNew 
                         placeholder={t("PostNewItem.selectGen")}
@@ -696,7 +852,11 @@ const EditItem = ({navigation, route}) => {
                         optValue={"_id"}
                         control={control}
                         fieldName="gender"
+                        selectedValue={gender}
                         error={errors.gender}
+                        changeValue={(value) => {
+                            setGender(value)
+                        } }
                     />
                     
                     <CommonInput  
@@ -714,6 +874,10 @@ const EditItem = ({navigation, route}) => {
                         control={control}
                         fieldName="color"
                         error={errors.color}
+                        selectedValue={color}
+                        changeValue={(value) => {
+                            setColor(value)
+                        } }
                     />
                     <SwitchInput 
                         control={control}
@@ -730,6 +894,10 @@ const EditItem = ({navigation, route}) => {
                             control={control}
                             fieldName="ageTypeId"
                             error={errors.ageTypeId}
+                            selectedValue={ageTypeId}
+                            changeValue={(value) => {
+                                setAgeTypeId(value)
+                            } }
                         />
 
                         <CommonInput  
@@ -754,6 +922,10 @@ const EditItem = ({navigation, route}) => {
                             control={control}
                             fieldName="weightTypeId"
                             error={errors.weightTypeId}
+                            selectedValue={weightTypeId}
+                            changeValue={(value) => {
+                                setWeightTypeId(value)
+                            } }
                         />
 
                         <CommonInput  
@@ -779,6 +951,10 @@ const EditItem = ({navigation, route}) => {
                             control={control}
                             fieldName="sizeTypeId"
                             error={errors.sizeTypeId}
+                            selectedValue={sizeTypeId}
+                            changeValue={(value) => {
+                                setSizeTypeId(value)
+                            } }
                         />
                         <CommonInput  
                             control={control}
@@ -799,6 +975,10 @@ const EditItem = ({navigation, route}) => {
                         control={control}
                         fieldName="stateId"
                         error={errors.stateId}
+                        selectedValue={stateId}
+                        changeValue={(value) => {
+                            setStateId(value)
+                        } }
                     />
 
                     <CommonInput  
@@ -834,6 +1014,7 @@ const EditItem = ({navigation, route}) => {
                             control={control}
                             fieldName="bidByType"
                             error={errors.bidByType}
+                            selectedValue={bidByType}
                             changeValue={value => setBidByType(value)}
                         />
 
