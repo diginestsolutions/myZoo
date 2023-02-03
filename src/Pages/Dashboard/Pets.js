@@ -34,10 +34,10 @@ const Pets = ({ label, onPress}) => {
         let data = {
             countryId : !isEmpty(userData?.Country) ? userData?.Country : '5fe321d2e9ce6f4494dd8b81',
         }
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        // dispatch({
+        //     type: LOADING,
+        //     payload: true
+        // })
     
         await customAxios.post(`customer/home/latestpets`, data)  
         .then(async response => {
@@ -45,17 +45,17 @@ const Pets = ({ label, onPress}) => {
             setLatestPets(response.data)
             
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            // dispatch({
+            //     type: LOADING,
+            //     payload: false
+            // })
         })
         .catch(async error => {
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            // dispatch({
+            //     type: LOADING,
+            //     payload: false
+            // })
         });
     }
       

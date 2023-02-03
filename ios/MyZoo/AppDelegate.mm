@@ -1,5 +1,7 @@
 #import "AppDelegate.h"
 #import <Firebase.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import "RNBootSplash.h"
 
 #import <React/RCTBundleURLProvider.h>
 
@@ -12,6 +14,7 @@
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
+  //[RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView];
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
@@ -33,6 +36,19 @@
 - (BOOL)concurrentRootEnabled
 {
   return true;
+}
+
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+
+  BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:application
+    openURL:url
+    sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+    annotation:options[UIApplicationOpenURLOptionsAnnotationKey]
+  ];
+  // Add any custom logic here.
+  return handled;
 }
 
 @end

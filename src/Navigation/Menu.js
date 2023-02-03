@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Home from './Home';
 import DrawerContent from './DrawerContent';
 import LoadingModal from '../Components/LoadingModal';
+import RNBootSplash from "react-native-bootsplash";
 
 
 const Drawer = createDrawerNavigator();
@@ -15,6 +16,12 @@ const Menu = () => {
 
 
   const { loading } = useSelector(state => state.auth)
+
+
+  useEffect(() => {
+    RNBootSplash.hide({ fade: true });
+  }, [])
+  
 
     useEffect(()=>{
 

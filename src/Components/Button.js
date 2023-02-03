@@ -1,11 +1,10 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { Box, HStack, Pressable, Text, Icon } from 'native-base'
 
 const Button = ({label, onPress, marginTop, iconName, icon, width, alignSelf, price}) => {
     return (
-        <Pressable onPress={onPress} width={width} alignSelf={alignSelf} 
-        >
+        <TouchableOpacity onPress={onPress} style={{ width: width, alignSelf: alignSelf }}>
             <Box 
                 borderRadius={8}
                 shadow={5}
@@ -27,7 +26,7 @@ const Button = ({label, onPress, marginTop, iconName, icon, width, alignSelf, pr
                 {price&&<Text color={"#fff"} fontWeight={400} fontFamily={'body'} fontSize={16}> {price}</Text>}
             </HStack>
             </Box>
-        </Pressable>
+        </TouchableOpacity>
     )
 }
 

@@ -1,5 +1,5 @@
 import { StyleSheet, ImageBackground, useWindowDimensions } from 'react-native'
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import ImageTextCard from '../../Components/ImageTextCard'
 import Favourite from '../../Components/Favourite'
 import { Box, HStack, Icon, Text, useToast } from 'native-base'
@@ -13,6 +13,7 @@ import { IMAGE_URL } from '../../config/Constants'
 import { RESET_ITEM } from '../../Redux/constants/myItemsConstant'
 import customAxios from '../../CustomAxios'
 import reactotron from 'reactotron-react-native'
+import LoadingContext from '../../context/loading'
 
 
 const AccessoriesCard = ({item, mx }) => {
@@ -20,6 +21,7 @@ const AccessoriesCard = ({item, mx }) => {
     const { width, height } = useWindowDimensions()
 
     const navigation = useNavigation();
+    const context = useContext(LoadingContext)
 
     const { userData } = useSelector(state => state.auth)
     const { currentBid, compare, fav, del } = useSelector(state => state.myItems)
@@ -51,10 +53,7 @@ const AccessoriesCard = ({item, mx }) => {
     };
 
     const deleteFavourite = async(data) => {
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
         await customAxios.post(`admin/accounts/_deletefavorite`, data)  
         .then(async response => {
     
@@ -68,10 +67,7 @@ const AccessoriesCard = ({item, mx }) => {
                 description: 'deleted from favourites successfully',
                 backgroundColor: 'success.400'
             })
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
            
         })
         .catch(async error => {
@@ -81,20 +77,14 @@ const AccessoriesCard = ({item, mx }) => {
                 description: error,
                 backgroundColor: 'error.400'
             })
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
     
         });
     }
 
 
     const addFavourite = async(data) => {
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
         await customAxios.post(`Front_End/Mob_products/_savefavorite`, data)  
         .then(async response => {
 
@@ -108,10 +98,7 @@ const AccessoriesCard = ({item, mx }) => {
                 type: FAVOURITE_ARRAY,
                 payload: [...favourites, data?.productId]
             })
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
             
         })
         .catch(async error => {
@@ -121,10 +108,7 @@ const AccessoriesCard = ({item, mx }) => {
                 description: error,
                 backgroundColor: 'error.400'
             })
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
     
            
         });

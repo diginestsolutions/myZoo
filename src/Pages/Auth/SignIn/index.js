@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Box, HStack, StatusBar, Spinner, CheckIcon, useToast, } from 'native-base'
 import CommonInput from '../../../Components/CommonInput'
 import CommonSingnInButton from './CommonSingnInButton'
@@ -23,6 +23,14 @@ import { useTranslation } from "react-i18next";
 import { getDashboardDatas } from '../../../Redux/actions/homeAction'
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import reactotron from 'reactotron-react-native'
+import LoadingContext from '../../../context/loading'
+import customAxios from '../../../CustomAxios'
+import {
+    AccessToken,
+    GraphRequest,
+    GraphRequestManager,
+    LoginManager,
+} from 'react-native-fbsdk';
 
 
 const SignIn = ({ navigation }) => {
@@ -33,14 +41,16 @@ const SignIn = ({ navigation }) => {
     const dispatch = useDispatch();
     const toast = useToast()
 
+    const context = useContext(LoadingContext)
+
     const { loginSuccess, loading, error, userData } = useSelector(state => state.auth)
 
     const googlesignIn = async () => {
         try {
             await GoogleSignin.hasPlayServices();
             const userInfo = await GoogleSignin.signIn();
-            reactotron.log({userInfo})
-            //this.setState({ userInfo });
+            reactotron.log(userInfo)
+            registerGoogleUser(userInfo)
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 // user cancelled the login flow
@@ -53,6 +63,49 @@ const SignIn = ({ navigation }) => {
             }
         }
     };
+
+
+
+    const registerGoogleUser = async (userInfo) => {
+        context.setLoading(true)
+        let data = {
+            "tokenId": userInfo?.idToken
+        }
+        await customAxios.post(`/mobileapp/googleAuth`, data)
+            .then(async response => {
+                context.setLoading(false)
+            })
+            .catch(async error => {
+                context.setLoading(false)
+                toast.show({
+                    title: "Error",
+                    description: error,
+                    backgroundColor: "error.500"
+                })
+
+
+            });
+    }
+
+    const loginWithFacebook = () => {
+        // Attempt a login using the Facebook login dialog asking for default permissions.
+        LoginManager.logInWithPermissions(['public_profile']).then(
+            login => {
+                if (login.isCancelled) {
+                    reactotron.log('Login cancelled');
+                } else {
+                    AccessToken.getCurrentAccessToken().then(data => {
+                        const accessToken = data.accessToken.toString();
+                        reactotron.log({accessToken});
+                    });
+                }
+            },
+            error => {
+                console.log('Login fail with error: ' + error);
+            },
+        );
+    };
+
 
     useEffect(() => {
         if (error) {
@@ -148,9 +201,8 @@ const SignIn = ({ navigation }) => {
                         labelColor='#34A853'
                         icon={<Ionicons name={'logo-google'} />}
                     />
-
                     <CommonSingnInButton
-                        // onPress={}
+                        onPress={loginWithFacebook}
                         label={t("Login.signFb")}
                         labelColor='#3972AA' ml={1}
                         icon={<Fontisto name={'facebook'} />}

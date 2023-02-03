@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import { Box, HStack, Icon, ScrollView, Text, Pressable, useToast, Spinner } from 'native-base'
 import Button from '../../Components/Button'
 import Header from '../../Components/Header'
@@ -29,6 +29,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import axios from 'axios'
 import { API_URL } from '../../config/Constants'
+import LoadingContext from '../../context/loading'
 
 
 
@@ -50,9 +51,9 @@ const CreateAccessory = ({navigation, route}) => {
 
     const { t } = useTranslation();
 
-    const { NoOfImage, NoOfVideo, ImageSize, VideoSize, VideoTime, MyZooPick  } = route.params
+    const context = useContext(LoadingContext)
 
-    reactotron.log({ params: route.params})
+    const { NoOfImage, NoOfVideo, ImageSize, VideoSize, VideoTime, MyZooPick  } = route.params
 
     const dispatch = useDispatch();
     const toast = useToast()  
@@ -103,19 +104,13 @@ const CreateAccessory = ({navigation, route}) => {
         let data = {
             Type: "5fdba00742ef4b45c3a60e49"
         }
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
     
         await customAxios.post(`customer/home/_getcategorybyId`, data)  
         .then(async response => {
             setCategoryList(response.data)
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         })
         .catch(async error => {
     
@@ -125,10 +120,7 @@ const CreateAccessory = ({navigation, route}) => {
                 backgroundColor: "error.500"
             })
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         });
     }
 
@@ -170,10 +162,7 @@ const CreateAccessory = ({navigation, route}) => {
 
     const onSubmit = data => {
 
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
         let imagesArray = [];
         let videoArray = [];
         const requests = []
@@ -267,10 +256,7 @@ const CreateAccessory = ({navigation, route}) => {
             }))
             .catch(errors => {
                 // react on errors.
-                dispatch({
-                    type: LOADING,
-                    payload: false
-                })
+                context.setLoading(false)
             })
         }
         else{
@@ -282,10 +268,7 @@ const CreateAccessory = ({navigation, route}) => {
 
 
     const accessorySave = async(data) => {
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
         await customAxios.post(`mobile/accessories/_save`,data)
         .then(async response => {
             toast.show({
@@ -294,10 +277,7 @@ const CreateAccessory = ({navigation, route}) => {
                 backgroundColor: "success.500"
             }) 
             navigation.goBack()
-            dispatch({
-                type: LOADING,
-                payload: false
-            })   
+            context.setLoading(false)
     
         })
         .catch(async error => {
@@ -306,10 +286,7 @@ const CreateAccessory = ({navigation, route}) => {
                 description: error,
                 backgroundColor: "error.500"
             })
-            dispatch({
-                type: LOADING,
-                payload: false
-            })  
+            context.setLoading(false) 
         })
     }
 

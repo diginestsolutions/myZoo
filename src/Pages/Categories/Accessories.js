@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Box, FlatList, Spinner, useToast } from 'native-base'
 import { useDispatch, useSelector } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native'
@@ -7,12 +7,15 @@ import { LOADING } from '../../Redux/constants/homeConstant'
 import customAxios from '../../CustomAxios'
 import CommonCard from '../../Components/CommonCard'
 import { IMAGE_URL } from '../../config/Constants'
+import LoadingContext from '../../context/loading'
 
 const Accessories = ({navigation}) => {
 
 
 
   const [categoryList, setCategoryList] = useState([])
+
+  const context = useContext(LoadingContext)
 
 
   const toast = useToast()
@@ -36,20 +39,14 @@ const Accessories = ({navigation}) => {
     );
 
     const getAllCategories = async(data) => {
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
     
         await customAxios.post(`customer/home/_getcategorybyId`, data)  
         .then(async response => {
             
             setCategoryList(response.data)
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         })
         .catch(async error => {
             
@@ -59,10 +56,7 @@ const Accessories = ({navigation}) => {
             })
     
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         });
     }
 

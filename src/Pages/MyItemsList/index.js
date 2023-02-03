@@ -21,7 +21,7 @@ const MyItemsList = ({}) => {
     const dispatch = useDispatch();
     const toast = useToast()
 
-    const { userData } = useSelector(state => state.auth)
+    const { userData, loading } = useSelector(state => state.auth)
     const [itemsList, setItemsList] = useState([])
 
     reactotron.log({userData})
@@ -97,6 +97,7 @@ const MyItemsList = ({}) => {
         <MyItemCard 
             item={item}
             onPress={()=>navigation.navigate('Item')}
+            onRefresh={getMyItemsList}
         />
     )
   return (
@@ -109,6 +110,8 @@ const MyItemsList = ({}) => {
                     data={itemsList}
                     keyExtractor={(item) => item._id}
                     renderItem={renderItems}
+                    refreshing={loading}
+                    onRefresh={getMyItemsList}
                 />
 
                 

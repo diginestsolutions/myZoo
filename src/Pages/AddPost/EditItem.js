@@ -225,6 +225,8 @@ const EditItem = ({navigation, route}) => {
         setSaleType(item?.SellingMode)
         setBidByType(item?.BidType)
         setDate(new Date(item?.EndDate))
+        setValue("BasePrice", item?.BasePrice?.replace("SR", ""))
+        setValue("FinalPrice", item?.FinalPrice?.replace("SR", ""))
       }
     }, [item])
 
@@ -411,6 +413,7 @@ const EditItem = ({navigation, route}) => {
     useEffect(() => {
         dispatch(countriesList())
         getAllCategories()
+        getPlanDetails()
     }, [])
 
 
@@ -424,31 +427,14 @@ const EditItem = ({navigation, route}) => {
             let details = response?.data?.data;
 
             if(details?.membership_status === true){
-                let petLimit = toNumber(details?.PetLimit);
-                let uploadedLimit = details.uploaded
-                if(petLimit <= uploadedLimit){
-                    //Limit Exceeds
-                    //navigation.navigate("memberWarning", { item: details })
-                    setShowAlert(true)
-
-                }
-                else{
-                    setNoOfImage(parseInt(details?.NoOfImage)-item?.Images?.length);
-                    setNoOfVideo(parseInt(details?.NoOfVideo)-item?.Videos?.length);
-                    setImageSize(parseFloat(details?.ImageSize)*1000000);
-                    setVideoSize(parseFloat(details?.VideoSize)*1000000);
-                    setVideoTime(parseFloat(details?.VideoTime));
-                    setMyZooPick(details?.Eligibleformyzoo ? true : false );
-                }
+                setNoOfImage(parseInt(details?.NoOfImage)-item?.Images?.length);
+                setNoOfVideo(parseInt(details?.NoOfVideo)-item?.Videos?.length);
+                setImageSize(parseFloat(details?.ImageSize)*1000000);
+                setVideoSize(parseFloat(details?.VideoSize)*1000000);
+                setVideoTime(parseFloat(details?.VideoTime));
+                setMyZooPick(details?.Eligibleformyzoo ? true : false );
                 
             }
-            else{
-                navigation.navigate("MyMembershipPlans")
-            }
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
             
         })
         .catch(async error => {
@@ -457,10 +443,6 @@ const EditItem = ({navigation, route}) => {
                 title: 'Error',
                 description: error,
                 backgroundColor: 'error.400'
-            })
-            dispatch({
-                type: LOADING,
-                payload: false
             })
     
            

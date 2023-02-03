@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import { Box, FlatList, useToast } from 'native-base'
 import Heading from '../../Components/Heading'
 import OrderCard from './OrderCard'
@@ -11,11 +11,14 @@ import { LOADING } from '../../Redux/constants/homeConstant'
 import customAxios from '../../CustomAxios'
 import CommonTextIcon from '../Profile/CommonTextIcon'
 import reactotron from 'reactotron-react-native'
+import LoadingContext from '../../context/loading'
 
 
 const MyOrder = ({navigation}) => {
 
     const { t } = useTranslation();
+
+    const context = useContext(LoadingContext)
 
     const [orderList, setOrderlist] = useState([])
 
@@ -41,21 +44,13 @@ const MyOrder = ({navigation}) => {
 	        countryId: userData?.Country
         }
 
-        reactotron.log({data})
-
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
     
         await customAxios.post(`/Front_End/CartMob/_orderlist_new`, data)  
         .then(async response => {
             setOrderlist(response.data)
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         })
         .catch(async error => {
 
@@ -67,10 +62,7 @@ const MyOrder = ({navigation}) => {
     
             
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         });
     }
 

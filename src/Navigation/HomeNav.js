@@ -36,6 +36,7 @@ import WriteProductReview from '../Pages/MyOrder/OrderDetails/WriteProductReview
 import ReturnRequest from '../Pages/MyOrder/OrderDetails/ReturnRequest';
 import OrderSuccess from '../Pages/Cart/Payment/PlaceOrder/OrderSuccess';
 import EditItem from '../Pages/AddPost/EditItem';
+import EditAccessory from '../Pages/AddPost/EditAccessory';
 // import ServiceSubCategory from './Services/ServiceSubCategory';
 // import MyOrder from '../Drawer/MyOrder';
 // import Cart from '../Cart';
@@ -101,6 +102,7 @@ const HomeNav = () => {
         <Stack.Screen name="MyBidding" component={MyBidding}/>
         <Stack.Screen name="MyItemsList" component={MyItemsList}/>
         <Stack.Screen name="EditPost" component={EditItem}/>
+        <Stack.Screen name="EditAccessory" component={EditAccessory}/>
         <Stack.Screen name="MyCompareList" component={MyCompareList}/>
         <Stack.Screen name="MyMembershipPlans" component={MyMembershipPlans}/>
         <Stack.Screen name="Faqs" component={Faqs}/>

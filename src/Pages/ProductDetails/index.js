@@ -1,5 +1,5 @@
 import { StyleSheet, ImageBackground, useWindowDimensions, Share } from 'react-native'
-import React, {useRef, useState, useEffect} from 'react'
+import React, {useRef, useState, useEffect, useContext} from 'react'
 import { Box, HStack, ScrollView, Text, Icon, Input, FlatList, useToast } from 'native-base'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -25,6 +25,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import customAxios from '../../CustomAxios'
 import { PET_ADDTOCART_SUCCESS } from '../../Redux/constants/cartConstant'
 import { isObject } from 'lodash'
+import LoadingContext from '../../context/loading'
 
 
 const ProductDetails = ({navigation, route}) => {
@@ -34,6 +35,8 @@ const ProductDetails = ({navigation, route}) => {
 
     const [productById, setProductId] = useState(null)
     const [recentPost, setRecentPost] = useState([])
+
+    const context = useContext(LoadingContext)
 
     const { id } = route.params
 
@@ -65,10 +68,7 @@ const ProductDetails = ({navigation, route}) => {
 
     const getSingleProductDetails = () => {
 
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
 
         let data = {
             id
@@ -77,10 +77,7 @@ const ProductDetails = ({navigation, route}) => {
         customAxios.post(`Front_End/Mob_products/_getproductbyIds`, data)  
         .then(async response => {
             setProductId(response.data)
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         })
         .catch(async error => {
 
@@ -90,10 +87,7 @@ const ProductDetails = ({navigation, route}) => {
                 backgroundColor: 'error.500'
             })
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         });
     }
 
@@ -116,10 +110,7 @@ const ProductDetails = ({navigation, route}) => {
                 userId: userData?.id,
             }
     
-            dispatch({
-                type: LOADING,
-                payload: true
-            })
+            context.setLoading(true)
             await customAxios.post(`admin/accounts/_deletefavorite`, data)  
             .then(async response => {
         
@@ -137,10 +128,7 @@ const ProductDetails = ({navigation, route}) => {
                 })
         
                 
-                dispatch({
-                    type: LOADING,
-                    payload: false
-                })
+                context.setLoading(false)
                
             })
             .catch(async error => {
@@ -150,10 +138,7 @@ const ProductDetails = ({navigation, route}) => {
                     backgroundColor: 'error.400'
                 })
         
-                dispatch({
-                    type: LOADING,
-                    payload: false
-                })
+                context.setLoading(false)
         
             });
         }
@@ -176,10 +161,7 @@ const ProductDetails = ({navigation, route}) => {
                 countryId: userData?.Country
             }
     
-            dispatch({
-                type: LOADING,
-                payload: true
-            })
+            context.setLoading(true)
             await customAxios.post(`Front_End/Mob_products/_savefavorite`, data)  
             .then(async response => {
                 toast.show({
@@ -191,10 +173,7 @@ const ProductDetails = ({navigation, route}) => {
                     type: FAVOURITE_ARRAY,
                     payload: [...favourites, data?.productId]
                 })
-                dispatch({
-                    type: LOADING,
-                    payload: false
-                })
+                context.setLoading(false)
                 
             })
             .catch(async error => {
@@ -204,10 +183,7 @@ const ProductDetails = ({navigation, route}) => {
                     description: error,
                     backgroundColor: 'error.400'
                 })
-                dispatch({
-                    type: LOADING,
-                    payload: false
-                })
+                context.setLoading(false)
         
                
             });
@@ -263,10 +239,7 @@ const ProductDetails = ({navigation, route}) => {
                 setpets: productById
             }
     
-            dispatch({
-                type: LOADING,
-                payload: true
-            })
+            context.setLoading(true)
             await customAxios.post(`Front_End/CartMob/_addtocart`, datas)  
             .then(async response => {
                 dispatch({
@@ -278,10 +251,7 @@ const ProductDetails = ({navigation, route}) => {
                     background: 'success.400'
                 })
     
-                dispatch({
-                    type: LOADING,
-                    payload: false
-                })
+                context.setLoading(false)
         
             })
             .catch(async error => {
@@ -292,10 +262,7 @@ const ProductDetails = ({navigation, route}) => {
                     background: 'error.400'
                 })
         
-                dispatch({
-                    type: LOADING,
-                    payload: false
-                })
+                context.setLoading(false)
             });
         }
         else{
@@ -314,10 +281,7 @@ const ProductDetails = ({navigation, route}) => {
                 setpets:productById
             }
     
-            dispatch({
-                type: LOADING,
-                payload: true
-            })
+            context.setLoading(true)
             await customAxios.post(`Front_End/CartMob/_addtocart`, datas)  
             .then(async response => {
                 dispatch({
@@ -328,10 +292,7 @@ const ProductDetails = ({navigation, route}) => {
                     description: 'Added to cart successfully',
                     background: 'success.400'
                 })
-                dispatch({
-                    type: LOADING,
-                    payload: false
-                })
+                context.setLoading(false)
         
             })
             .catch(async error => {
@@ -342,10 +303,7 @@ const ProductDetails = ({navigation, route}) => {
                     background: 'error.400'
                 })
         
-                dispatch({
-                    type: LOADING,
-                    payload: false
-                })
+                context.setLoading(false)
             });
         }
         else{
@@ -377,10 +335,7 @@ const ProductDetails = ({navigation, route}) => {
 
 
     const getRecentPost = async( data ) => {
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
     
         let url = "";
     
@@ -399,20 +354,14 @@ const ProductDetails = ({navigation, route}) => {
 
             setRecentPost(response.data)
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
     
         })
         .catch(async error => {
     
             setRecentPost([])
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         });
     }
 
@@ -439,10 +388,7 @@ const ProductDetails = ({navigation, route}) => {
                 UserId: userData.id
             }
     
-            dispatch({
-                type: LOADING,
-                payload: true
-            })
+            context.setLoading(true)
             await customAxios.post(`admin/Productchat/_saveproductreview`, datas)  
             .then(async response => {
                 toast.show({
@@ -460,10 +406,7 @@ const ProductDetails = ({navigation, route}) => {
                     background: 'error.400'
                 })
         
-                dispatch({
-                    type: LOADING,
-                    payload: false
-                })
+                context.setLoading(false)
             });
         }
         else{
@@ -532,10 +475,7 @@ const ProductDetails = ({navigation, route}) => {
                 to: productById?.user?.[0]?._id
             }
     
-            dispatch({
-                type: LOADING,
-                payload: true
-            })
+            context.setLoading(true)
             await customAxios.post(`api/profile/chat/messages/conversations/create`, data)  
             .then(async response => {
     
@@ -546,19 +486,13 @@ const ProductDetails = ({navigation, route}) => {
                 navigation.navigate('ChatNav', { screen:'ChatScreen', params: { item: user }})
     
     
-                dispatch({
-                    type: LOADING,
-                    payload: false
-                })
+                context.setLoading(false)
         
             })
             .catch(async error => {
         
                 
-                dispatch({
-                    type: LOADING,
-                    payload: false
-                })
+                context.setLoading(false)
             });
         }
         else{

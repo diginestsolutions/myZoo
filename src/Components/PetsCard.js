@@ -1,5 +1,5 @@
 import { StyleSheet, ImageBackground, useWindowDimensions } from 'react-native'
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import ImageTextCard from './ImageTextCard'
 import { Box, HStack, Icon, Image, Text, useToast } from 'native-base'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -10,11 +10,14 @@ import { FAVOURITE_ARRAY, LOADING } from '../Redux/constants/homeConstant'
 import { RESET_ITEM } from '../Redux/constants/myItemsConstant'
 import customAxios from '../CustomAxios'
 import { IMAGE_URL } from '../config/Constants'
+import LoadingContext from '../context/loading'
 
 
 const PetsCard = ({item, mx, country }) => {
 
     const { width } = useWindowDimensions()
+
+    const context = useContext(LoadingContext)
 
     const navigation = useNavigation();
 
@@ -68,10 +71,7 @@ const PetsCard = ({item, mx, country }) => {
     };
 
     const addFavourite = async(data) => {
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
         await customAxios.post(`Front_End/Mob_products/_savefavorite`, data)  
         .then(async response => {
 
@@ -85,10 +85,7 @@ const PetsCard = ({item, mx, country }) => {
                 type: FAVOURITE_ARRAY,
                 payload: [...favourites, data?.productId]
             })
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
             
         })
         .catch(async error => {
@@ -98,20 +95,14 @@ const PetsCard = ({item, mx, country }) => {
                 description: error,
                 backgroundColor: 'error.400'
             })
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
     
            
         });
     }
 
     const deleteFavourite = async(data) => {
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
         await customAxios.post(`admin/accounts/_deletefavorite`, data)  
         .then(async response => {
     
@@ -125,10 +116,7 @@ const PetsCard = ({item, mx, country }) => {
                 description: 'deleted from favourites successfully',
                 backgroundColor: 'success.400'
             })
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
            
         })
         .catch(async error => {
@@ -138,10 +126,7 @@ const PetsCard = ({item, mx, country }) => {
                 description: error,
                 backgroundColor: 'error.400'
             })
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
     
         });
     }
@@ -169,7 +154,7 @@ const PetsCard = ({item, mx, country }) => {
     >
         <Box>
             <Image 
-                source={{ uri: `${IMAGE_URL}${item?.Images[0]?.UploadedFileName}` }}
+                source={item?.Images[0]?.UploadedFileName ? { uri: `${IMAGE_URL}${item?.Images[0]?.UploadedFileName}` } : require('../Images/splash.png')}
                 style={{ height:120, width: width/2, resizeMode: 'stretch', borderTopLeftRadius: 10, borderTopRightRadius: 10 }}
                 alt="pet"
             />

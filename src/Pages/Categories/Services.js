@@ -1,5 +1,5 @@
 import { StyleSheet, useWindowDimensions } from 'react-native'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Box, FlatList, HStack, Image, Pressable, useToast } from 'native-base'
 import ServiceCard from './ServiceCard'
 import { useDispatch, useSelector } from 'react-redux'
@@ -7,11 +7,13 @@ import { useNavigation } from '@react-navigation/native'
 import { useFocusEffect } from '@react-navigation/native'
 import { LOADING } from '../../Redux/constants/homeConstant'
 import customAxios from '../../CustomAxios'
+import LoadingContext from '../../context/loading'
 
 
 const Services = ({}) => {
 
     const dispatch = useDispatch()
+    const context = useContext(LoadingContext)
 
     const navigation = useNavigation();
     const [categoryList, setCategoryList] = useState([])
@@ -31,20 +33,14 @@ const Services = ({}) => {
 
 
     const getAllCategories = async(data) => {
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
     
         await customAxios.post(`admin/service/_loadServicesType`, data)  
         .then(async response => {
             
             setCategoryList(response.data)
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         })
         .catch(async error => {
             
@@ -54,10 +50,7 @@ const Services = ({}) => {
             })
     
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         });
     }
 

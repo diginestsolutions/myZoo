@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import { Box, FlatList, HStack, Image, Pressable, Text, Spinner, useToast } from 'native-base'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -8,12 +8,14 @@ import { IMAGE_URL } from '../../config/Constants'
 import CommonCard from '../../Components/CommonCard'
 import { LOADING } from '../../Redux/constants/homeConstant'
 import customAxios from '../../CustomAxios'
+import LoadingContext from '../../context/loading'
 
 
 const Pets = ({}) => {
 
 
   const dispatch = useDispatch();
+  const context = useContext(LoadingContext)
 
   const toast = useToast();
 
@@ -35,20 +37,14 @@ const Pets = ({}) => {
     );
 
     const getAllCategories = async(data) => {
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
     
         await customAxios.post(`customer/home/_getcategorybyId`, data)  
         .then(async response => {
             
             setCategoryList(response.data)
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         })
         .catch(async error => {
             
@@ -58,10 +54,7 @@ const Pets = ({}) => {
             })
     
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         });
     }
 

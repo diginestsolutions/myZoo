@@ -1,5 +1,5 @@
 import { StyleSheet, useWindowDimensions } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Box, FlatList, HStack, Image, Pressable, Spinner, Text, useToast } from 'native-base'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -9,6 +9,7 @@ import { LOADING } from '../../Redux/constants/homeConstant';
 import CommonCard from '../../Components/CommonCard';
 import { IMAGE_URL } from '../../config/Constants';
 import customAxios from '../../CustomAxios';
+import LoadingContext from '../../context/loading';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,8 @@ const SubCategory = ({ route }) => {
 
 	const { category } = route.params
 	const toast = useToast()
+
+	const context = useContext(LoadingContext)
 
     const [subCategoryList, setSubCategoryList] = useState([])
 
@@ -41,19 +44,13 @@ const SubCategory = ({ route }) => {
 
 
     const getAllSubCategories = async(data) => {
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
     
         await customAxios.post(`productManage/subcategory/list`, data)  
         .then(async response => {
             setSubCategoryList(response.data)
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         })
         .catch(async error => {
     
@@ -62,10 +59,7 @@ const SubCategory = ({ route }) => {
                 description: error
             })
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+			context.setLoading(false)
         });
     }
 

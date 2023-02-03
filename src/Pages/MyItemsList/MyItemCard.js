@@ -1,7 +1,7 @@
 import { StyleSheet, ImageBackground } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { Box, HStack, Actionsheet, Text, Icon, Pressable, useDisclose, Button, useToast } from 'native-base'
+import { Box, HStack, Actionsheet, Text, Icon, Pressable, useDisclose, Button, useToast, AlertDialog } from 'native-base'
 
 import Favourite from '../../Components/Favourite'
 import { LOADING, RESET_PRODUCT } from '../../Redux/constants/homeConstant'
@@ -11,11 +11,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { IMAGE_URL } from '../../config/Constants'
 import moment from 'moment'
 import customAxios from '../../CustomAxios'
+import LoadingContext from '../../context/loading'
 
 
-const MyItemCard = ({ item }) => {
+const MyItemCard = ({ item, onRefresh }) => {
 
     const toast = useToast()
+    const context = useContext(LoadingContext)
+
+    const [isDelete, setIsDelete] = React.useState(false);
 
     const {
         isOpen,
@@ -31,23 +35,24 @@ const MyItemCard = ({ item }) => {
         navigation.navigate('ProductDetails', { id: item?._id });
     }
 
-    const editItems = async() => {
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+    const deleteItem = async() => {
+        setIsDelete(false)
+        context.setLoading(true)
         onClose()
         //navigation.navigate("EditPost", { item: item })
         let data = {
-            id: item?._id
+            _id: item?._id
         }
-        await customAxios.post(`Front_End/Mob_products/_getproductbyIds`, data)  
+        await customAxios.post(`user/items/_deleteitem`, data)  
         .then(async response => {
-            navigation.navigate("EditPost", { item: response?.data })
+            
 
-            dispatch({
-                type: LOADING,
-                payload: false
+            context.setLoading(false)
+            onRefresh()
+            toast.show({
+                title: 'Success',
+                description: 'Item Deleted successfully',
+                backgroundColor: 'success.500'
             })
         })
         .catch(async error => {
@@ -58,10 +63,70 @@ const MyItemCard = ({ item }) => {
                 backgroundColor: 'error.500'
             })
 
-            dispatch({
-                type: LOADING,
-                payload: false
+            context.setLoading(false)
+        });
+    }
+
+    const editItems = async() => {
+        context.setLoading(true)
+        onClose()
+        //navigation.navigate("EditPost", { item: item })
+        let data = {
+            id: item?._id
+        }
+        await customAxios.post(`Front_End/Mob_products/_getproductbyIds`, data)  
+        .then(async response => {
+            if(response?.data?.Type === "5fdba00742ef4b45c3a60e49"){
+                navigation.navigate("EditAccessory", { item: response?.data })
+            }
+            else if(response?.data?.Type === "5fdba02442ef4b45c3a60e4a"){
+                navigation.navigate("EditPost", { item: response?.data })
+            }
+            onRefresh()
+
+            context.setLoading(false)
+        })
+        .catch(async error => {
+
+            toast.show({
+                title: 'Error',
+                description: error,
+                backgroundColor: 'error.500'
             })
+
+            context.setLoading(false)
+        });
+    }
+
+    const suspendItem = async(status) => {
+        context.setLoading(true)
+        onClose()
+        //navigation.navigate("EditPost", { item: item })
+        let data = {
+            _id: item?._id,
+            status
+        }
+        await customAxios.post(`user/items/_activateitem`, data)  
+        .then(async response => {
+            
+            toast.show({
+                title: 'Success',
+                description: status ? "Item Activated successfully" : "Item Suspended successfully",
+                backgroundColor: 'success.500'
+            })
+            onRefresh()
+
+            context.setLoading(false)
+        })
+        .catch(async error => {
+
+            toast.show({
+                title: 'Error',
+                description: error,
+                backgroundColor: 'error.500'
+            })
+
+            context.setLoading(false)
         });
     }
 
@@ -116,17 +181,62 @@ const MyItemCard = ({ item }) => {
                             <Icon as={<Ionicons />} name={'ellipsis-vertical-outline'} size={15} ml={2} />
                         </Button>
             <Actionsheet isOpen={isOpen} onClose={onClose}>
-                <Actionsheet.Content>
+                {item?.IsActive && <Actionsheet.Content>
                     <Actionsheet.Item
                         startIcon={<Icon as={<Ionicons name="create-outline" />} color="muted.500" mr={3} mt={1} />}
                         onPress={editItems}
                     >
                         Edit
                     </Actionsheet.Item>
-                    <Actionsheet.Item startIcon={<Icon as={<Ionicons name="power-outline" />} color="muted.500" mr={3} mt={1} />}>Suspend</Actionsheet.Item>
-                    <Actionsheet.Item startIcon={<Icon as={<Ionicons name="trash-outline" />} color="muted.500" mr={3} mt={1} />}>Delete</Actionsheet.Item>
-                </Actionsheet.Content>
+                    <Actionsheet.Item 
+                        startIcon={<Icon as={<Ionicons name="power-outline" />} 
+                        color="muted.500" 
+                        mr={3} 
+                        mt={1} 
+                        />}
+                        onPress={() => suspendItem(false)}
+                    >
+                            Suspend
+                        </Actionsheet.Item>
+                    <Actionsheet.Item startIcon={<Icon as={<Ionicons name="trash-outline" />} color="muted.500" mr={3} mt={1} />}
+                        onPress={() => {
+                            onClose()
+                            setIsDelete(true)
+                        }}
+                    >Delete</Actionsheet.Item>
+                </Actionsheet.Content>}
+                {!item?.IsActive && <Actionsheet.Content>
+                    <Actionsheet.Item 
+                        startIcon={<Icon as={<Ionicons name="power-outline" />} 
+                        color="muted.500" 
+                        mr={3} 
+                        mt={1} 
+                        />}
+                        onPress={() => suspendItem(true)}
+                    >
+                            Activate
+                        </Actionsheet.Item>
+                </Actionsheet.Content>}
             </Actionsheet>
+            <AlertDialog  isOpen={isDelete} onClose={() => setIsDelete(false)}>
+                <AlertDialog.Content>
+                    <AlertDialog.CloseButton />
+                    <AlertDialog.Header>Delete Item</AlertDialog.Header>
+                    <AlertDialog.Body>
+                        Are you sure want to delete this item
+                    </AlertDialog.Body>
+                    <AlertDialog.Footer>
+                        <Button.Group space={2}>
+                            <Button variant="unstyled" colorScheme="coolGray" onPress={() => setIsDelete(false)} >
+                                Cancel
+                            </Button>
+                            <Button colorScheme="danger" onPress={deleteItem}>
+                                Delete
+                            </Button>
+                        </Button.Group>
+                    </AlertDialog.Footer>
+                </AlertDialog.Content>
+            </AlertDialog>
         </>
     )
 }

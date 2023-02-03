@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Box } from 'native-base';
@@ -20,6 +20,8 @@ import Currency from '../Screens/Drawer/Currency';
 import { getMyFavourite } from '../Redux/actions/myItemsAction';
 import MemberShipWarning from '../Components/MemberShipWarning';
 import VerifyOtp from '../Pages/Auth/ForgotPassword/VerifyOtp';
+import LoadingContext from '../context/loading';
+import LoadingModal from '../Components/LoadingModal';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +29,7 @@ const Navigation = () => {
 
     const dispatch = useDispatch();
     const [initialScreen, setInitialScreen] = useState(null)
+    const loadingContext = useContext(LoadingContext)
 
     
 
@@ -128,6 +131,7 @@ const Navigation = () => {
 
                 </Stack.Navigator>
             </NavigationContainer>
+            <LoadingModal isVisible={loadingContext.loading}/>
         </Box>
     )
 }

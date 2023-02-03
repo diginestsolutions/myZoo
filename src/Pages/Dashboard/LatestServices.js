@@ -34,10 +34,10 @@ const LatestServices = ({ label, onPress}) => {
 
 
     const getLatestServices = async (data) => {
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        // dispatch({
+        //     type: LOADING,
+        //     payload: true
+        // })
 
         fetch(`${API_URL}customer/home/latestservices`, {
             method: 'POST',
@@ -46,16 +46,16 @@ const LatestServices = ({ label, onPress}) => {
         .then((response) => response.json())
         .then((json) => {
             setServices(json)
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            // dispatch({
+            //     type: LOADING,
+            //     payload: false
+            // })
         })
         .catch(async error => {
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            // dispatch({
+            //     type: LOADING,
+            //     payload: false
+            // })
         });
     }
       

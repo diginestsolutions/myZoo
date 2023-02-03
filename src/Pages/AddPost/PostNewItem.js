@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import { useForm } from "react-hook-form";
 import { Box, HStack, Icon, ScrollView, Text, Pressable, useToast, Spinner, Image } from 'native-base'
 import Button from '../../Components/Button'
@@ -29,6 +29,7 @@ import axios from 'axios';
 import { API_URL } from '../../config/Constants';
 import SelectNew from '../../Components/SelectNew';
 import SwitchInput from '../../Components/SwitchInput';
+import LoadingContext from '../../context/loading';
 
 
 let colorList = [
@@ -53,6 +54,7 @@ const PostNewItem = ({navigation, route}) => {
 
     const dispatch = useDispatch();
     const toast = useToast()  
+    const context = useContext(LoadingContext)
 
     const [categoryList, setCategoryList ] = useState([])
     const [subCategoryList, setSubCategoryList] = useState([])
@@ -142,17 +144,11 @@ const PostNewItem = ({navigation, route}) => {
     }, [size])
 
     const getSizeTypeList = async() => {
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
         await customAxios.post(`admin/pets/_loadSizeType`)  
         .then(async response => {
             setSizeTypeList(response.data)
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         })
         .catch(async error => {
     
@@ -162,25 +158,16 @@ const PostNewItem = ({navigation, route}) => {
                 backgroundColor: "error.500"
             })
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         });
     }
 
     const getWeightTypeList = async() => {
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
         await customAxios.post(`admin/pets/_loadWeightType`)  
         .then(async response => {
             setWeightTypeList(response.data)
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         })
         .catch(async error => {
     
@@ -190,27 +177,18 @@ const PostNewItem = ({navigation, route}) => {
                 backgroundColor: "error.500"
             })
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         });
     }
 
 
     const getAgeTypeList = async() => {
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
         await customAxios.post(`admin/pets/_loadAgeType`)  
         .then(async response => {
 
             setAgeTypeList(response.data)
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         })
         .catch(async error => {
     
@@ -220,10 +198,7 @@ const PostNewItem = ({navigation, route}) => {
                 backgroundColor: "error.500"
             })
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         });
     }
     
@@ -238,19 +213,13 @@ const PostNewItem = ({navigation, route}) => {
         let data = {
             Type: "5fdba02442ef4b45c3a60e4a"
         }
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
     
         await customAxios.post(`customer/home/_getcategorybyId`, data)  
         .then(async response => {
             setCategoryList(response.data)
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         })
         .catch(async error => {
     
@@ -260,10 +229,7 @@ const PostNewItem = ({navigation, route}) => {
                 backgroundColor: "error.500"
             })
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         });
     }
     
@@ -280,19 +246,13 @@ const PostNewItem = ({navigation, route}) => {
     }, [catId])
 
     const getAllSubCategories = async(data) => {
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(false)
     
         await customAxios.post(`productManage/subcategory/list`, data)  
         .then(async response => {
             setSubCategoryList(response.data)
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         })
         .catch(async error => {
     
@@ -302,10 +262,7 @@ const PostNewItem = ({navigation, route}) => {
                 backgroundColor: "error.500"
             })
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
         });
     }
 
@@ -394,10 +351,7 @@ const PostNewItem = ({navigation, route}) => {
     });
 
     const petSave = async(data) => {
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
         await customAxios.post(`mobile/pets/_save`,data)
         .then(async response => {
             toast.show({
@@ -406,10 +360,7 @@ const PostNewItem = ({navigation, route}) => {
                 backgroundColor: "success.500"
             }) 
             navigation.goBack()
-            dispatch({
-                type: LOADING,
-                payload: false
-            })   
+            context.setLoading(false) 
     
         })
         .catch(async error => {
@@ -418,19 +369,13 @@ const PostNewItem = ({navigation, route}) => {
                 description: error,
                 backgroundColor: "error.500"
             })
-            dispatch({
-                type: LOADING,
-                payload: false
-            })  
+            context.setLoading(false) 
         })
     }
 
     const onSubmit = data => {
 
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
         let imagesArray = [];
         let videoArray = [];
         const requests = []
@@ -567,6 +512,7 @@ const PostNewItem = ({navigation, route}) => {
             }
             petSave(datas)
         }
+        context.setLoading(false)
     };
 
     //const onSubmit = data => reactotron.log(data)
@@ -579,8 +525,6 @@ const PostNewItem = ({navigation, route}) => {
         }
 
         const result = await launchImageLibrary(options);
-
-        reactotron.log({result})
 
         if(result.assets[0]?.type.includes("image")){
             if(image.length >= NoOfImage){

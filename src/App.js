@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import "./i18n.config"
 import messaging from '@react-native-firebase/messaging';
 import notifee from '@notifee/react-native';
+import LoadingProvider from './context/loading/loadingContext';
 
 
 const theme = extendTheme({
@@ -121,7 +122,7 @@ const App = () => {
             id: 'default',
             name: 'Default Channel',
         });
-        await messaging().registerDeviceForRemoteMessages();
+        //await messaging().registerDeviceForRemoteMessages();
         const token = await messaging().getToken();
       }
     
@@ -129,9 +130,11 @@ const App = () => {
   
     return (
         <NativeBaseProvider config={config} theme={theme}>
-            <Provider store={store}>
-                <Navigation/>
-            </Provider>
+            <LoadingProvider>
+              <Provider store={store}>
+                  <Navigation/>
+              </Provider>
+            </LoadingProvider>
         </NativeBaseProvider>
     )
   

@@ -37,10 +37,10 @@ const Accessories = ({label}) => {
         let data = {
             countryId : !isEmpty(userData?.Country) ? userData?.Country : '5fe321d2e9ce6f4494dd8b81',
         }
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        // dispatch({
+        //     type: LOADING,
+        //     payload: true
+        // })
     
         await customAxios.post(`customer/home/latestaccessories`, data)  
         .then(async response => {
@@ -48,17 +48,17 @@ const Accessories = ({label}) => {
             setAccessoryArray(response.data)
             
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            // dispatch({
+            //     type: LOADING,
+            //     payload: false
+            // })
         })
         .catch(async error => {
     
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            // dispatch({
+            //     type: LOADING,
+            //     payload: false
+            // })
         });
     }
       

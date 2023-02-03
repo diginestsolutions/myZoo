@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { LOADING } from '../../Redux/constants/homeConstant';
 import customAxios from '../../CustomAxios';
@@ -7,6 +7,7 @@ import PetsCard from '../../Components/PetsCard';
 import { Box, FlatList } from 'native-base';
 import Heading from '../../Components/Heading';
 import reactotron from 'reactotron-react-native';
+import LoadingContext from '../../context/loading';
 
 const PetsDetails = ({navigation, route}) => {
 
@@ -16,13 +17,11 @@ const PetsDetails = ({navigation, route}) => {
 
     const { breed } = route.params
 	const { userData } = useSelector(state => state.auth)
+    const context = useContext(LoadingContext)
 
     // PRODUCT LIST
 	const getProductList = () => {
-		dispatch({
-			type: LOADING,
-			payload: true
-		})
+		context.setLoading(true)
 		let data = {
 			Type: "5fdba02442ef4b45c3a60e4a",
 			Breed: breed,
@@ -35,10 +34,7 @@ const PetsDetails = ({navigation, route}) => {
         
 		customAxios.post(`Front_End/Mob_products/_getproductLists`, data)  
 		.then(async response => {
-			dispatch({
-				type: LOADING,
-				payload: false
-			})
+			context.setLoading(false)
 			setDatas(response?.data)
 			
 		})
@@ -48,6 +44,7 @@ const PetsDetails = ({navigation, route}) => {
 				description: error,
 				backgroundColor: 'error.500'
 			})
+            context.setLoading(false)
 		});
 	}
 

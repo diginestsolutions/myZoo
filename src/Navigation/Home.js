@@ -1,5 +1,5 @@
-import { Animated, Easing, StyleSheet, useWindowDimensions } from 'react-native'
-import React, {useState} from 'react'
+import { Animated, Easing, StyleSheet, TouchableOpacity, useWindowDimensions } from 'react-native'
+import React, {useContext, useState} from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Avatar, Box, Center, Icon, Pressable, Text,  Modal, HStack, useDisclose, Alert, VStack, IconButton, CloseIcon} from 'native-base';
 import Octicons from 'react-native-vector-icons/Octicons'
@@ -24,12 +24,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import customAxios from '../CustomAxios';
 import { LOADING } from '../Redux/constants/homeConstant';
 import { toNumber } from 'lodash';
+import LoadingContext from '../context/loading';
 
 const Tab = createBottomTabNavigator();
 
 const Home = ({navigation}) => {
 
     const route = useRoute();
+
+    const context = useContext(LoadingContext)
 
     const { userData } = useSelector(state => state.auth)
 
@@ -47,10 +50,7 @@ const Home = ({navigation}) => {
         let data = {
             "UserId": userData.id
         }
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
         await customAxios.post(`user/membership/_plandetails`, data)  
         .then(async response => {
 
@@ -80,10 +80,7 @@ const Home = ({navigation}) => {
             else{
                 navigation.navigate("MyMembershipPlans")
             }
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
             
         })
         .catch(async error => {
@@ -93,10 +90,7 @@ const Home = ({navigation}) => {
                 description: error,
                 backgroundColor: 'error.400'
             })
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
     
            
         });
@@ -109,10 +103,7 @@ const Home = ({navigation}) => {
         let data = {
             "UserId": userData.id
         }
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
         await customAxios.post(`user/membership/_planaccsdetails`, data)  
         .then(async response => {
 
@@ -141,10 +132,7 @@ const Home = ({navigation}) => {
             else{
                 navigation.navigate("MyMembershipPlans")
             }
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
             
         })
         .catch(async error => {
@@ -154,10 +142,7 @@ const Home = ({navigation}) => {
                 description: error,
                 backgroundColor: 'error.400'
             })
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
     
            
         });
@@ -170,10 +155,7 @@ const Home = ({navigation}) => {
         let data = {
             "UserId": userData.id
         }
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        context.setLoading(true)
         await customAxios.post(`user/membership/_planservicedetails`, data)  
         .then(async response => {
 
@@ -205,10 +187,7 @@ const Home = ({navigation}) => {
             else{
                 navigation.navigate("MyMembershipPlans")
             }
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
             
         })
         .catch(async error => {
@@ -218,10 +197,7 @@ const Home = ({navigation}) => {
                 description: error,
                 backgroundColor: 'error.400'
             })
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            context.setLoading(false)
     
            
         });
@@ -397,7 +373,7 @@ const Home = ({navigation}) => {
                     else if (route.name === 'AddPost') {
                         return(  
                         <>
-                            <Pressable onPress={userData?.id ? () => openAddModal("bottom") : () => navigation.navigate("SignIn")}>
+                            <TouchableOpacity onPress={userData?.id ? () => openAddModal("bottom") : () => navigation.navigate("SignIn")}>
                             <Avatar 
                                 bg={"#008ECC"}
                                 size={70}
@@ -409,12 +385,17 @@ const Home = ({navigation}) => {
                                     color="#fff" size={50} ml={1.5} 
                                 />
                             </Avatar>
-                            </Pressable>
+                            </TouchableOpacity>
                             
 
                             <Modal
                                 isOpen={openAddpost} onClose={() => setOpenAddpost(false)} safeAreaTop={true} mt={190}
                             >  
+                                <TouchableOpacity onPress={()=>{
+                                            addNewAccessory()
+                                            
+                                            setOpenAddpost(false)
+                                        }}>
                                 <Avatar 
                                     bg={"#008ECC"}
                                     size={42}
@@ -423,45 +404,46 @@ const Home = ({navigation}) => {
                                     mb={5}
                                 >
                                     <Icon 
-                                        onPress={()=>{
-                                            addNewAccessory()
-                                            
-                                            setOpenAddpost(false)
-                                        }}
+                                        
                                         as={<FontAwesome />} name={'chain'} color="#fff" size={22}
                                     />
                                 </Avatar>
+                                </TouchableOpacity>
                                 <HStack justifyContent={'space-between'} w={'50%'}>
+                                <TouchableOpacity onPress={()=>{
+                                            addNewPet()
+                                            
+                                            setOpenAddpost(false)
+                                        }}>  
                                 <Avatar 
                                     bg={"#008ECC"}
                                     size={42}
                                     shadow='9'
                                 >
                                     <Icon 
-                                        onPress={()=>{
-                                            addNewPet()
-                                            
-                                            setOpenAddpost(false)
-                                        }}
+                                        
                                         as={<FontAwesome5 />} name={'cat'} 
                                         color="#fff" size={22}
                                     />
                                 </Avatar>
+                                </TouchableOpacity> 
+                                <TouchableOpacity onPress={()=>{
+                                            //navigation.navigate('CreateService')
+                                            setOpenAddpost(false)
+                                            addNewService()
+                                        }}>
                                 <Avatar 
                                     bg={"#008ECC"}
                                     size={42}
                                     shadow='9'
                                 >
                                     <Icon 
-                                        onPress={()=>{
-                                            //navigation.navigate('CreateService')
-                                            setOpenAddpost(false)
-                                            addNewService()
-                                        }}
+                                        
                                         as={<FontAwesome />} name={'scissors'} 
                                         color="#fff" size={22} 
                                     />
                                 </Avatar>
+                                </TouchableOpacity>
                                 </HStack>
                             </Modal>
                         </>

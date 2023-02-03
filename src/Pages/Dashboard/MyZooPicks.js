@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FlatList, useToast } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,6 +9,7 @@ import CardTitle from '../../Components/CardTitle'
 import PetsCard from '../../Components/PetsCard'
 import { LOADING } from '../../Redux/constants/homeConstant'
 import { API_URL } from '../../config/Constants'
+import LoadingContext from '../../context/loading'
 
 
 const MyzooPicks = ({ label, onPress}) => {
@@ -16,10 +17,16 @@ const MyzooPicks = ({ label, onPress}) => {
     const dispatch = useDispatch();
     const toast = useToast()
 
+    const loadinContext = useContext(LoadingContext)
+
+
+
     const [myZooPicks, setMyZooPicks] = useState([])
 
     const {loading } = useSelector(state => state.home)
     const { userData } = useSelector(state => state.auth)
+
+
 
 
     useEffect(() => {
@@ -40,10 +47,11 @@ const MyzooPicks = ({ label, onPress}) => {
         let data = {
             countryId : !isEmpty(userData?.Country) ? userData?.Country : "5fe321d2e9ce6f4494dd8b81"
         }
-        dispatch({
-            type: LOADING,
-            payload: true
-        })
+        loadinContext.setLoading(true)
+        // dispatch({
+        //     type: LOADING,
+        //     payload: true
+        // })
         fetch(`${API_URL}home/myzoopick`, {
             method: 'POST',
             body: JSON.stringify(data)
@@ -53,26 +61,13 @@ const MyzooPicks = ({ label, onPress}) => {
             if(json.status){
 
                 setMyZooPicks(json.data)
-                dispatch({
-                    type: LOADING,
-                    payload: false
-                })
-
-            }else{
-
-               
-                dispatch({
-                    type: LOADING,
-                    payload: false
-                })
+                
 
             }
+            loadinContext.setLoading(false)
         })
         .catch(async error => {
-            dispatch({
-                type: LOADING,
-                payload: false
-            })
+            loadinContext.setLoading(false)
         });
     }
 

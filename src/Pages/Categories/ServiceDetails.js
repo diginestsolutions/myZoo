@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Box, Icon, FlatList, Spinner } from 'native-base'
 import Heading from '../../Components/Heading'
 import { useDispatch, useSelector } from 'react-redux'
@@ -7,9 +7,12 @@ import AccessoriesCard from '../Dashboard/AccessoriesCard'
 import { LOADING } from '../../Redux/constants/homeConstant'
 import customAxios from '../../CustomAxios'
 import reactotron from 'reactotron-react-native'
+import LoadingContext from '../../context/loading'
 
 
 const ServiceDetails = ({ navigation, route }) => {
+
+    const context = useContext(LoadingContext)
 
     const dispatch = useDispatch();
 
@@ -27,10 +30,7 @@ const ServiceDetails = ({ navigation, route }) => {
 
     // PRODUCT LIST
 	const getProductList = () => {
-		dispatch({
-			type: LOADING,
-			payload: true
-		})
+		context.setLoading(true)
 		let data = {
             Type: "5fdba03942ef4b45c3a60e4b",
             id: breed,
@@ -43,10 +43,7 @@ const ServiceDetails = ({ navigation, route }) => {
         
 		customAxios.post(`Front_End/Mob_products/_getproductLists`, data)  
 		.then(async response => {
-			dispatch({
-				type: LOADING,
-				payload: false
-			})
+			context.setLoading(false)
 			setDatas(response?.data)
 			
 		})
@@ -56,6 +53,7 @@ const ServiceDetails = ({ navigation, route }) => {
 				description: error,
 				backgroundColor: 'error.500'
 			})
+            context.setLoading(false)
 		});
 	}
 

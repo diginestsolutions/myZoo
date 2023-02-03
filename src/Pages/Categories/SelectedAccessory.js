@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Box, Icon, FlatList, Spinner } from 'native-base'
 import Heading from '../../Components/Heading'
 import { useDispatch, useSelector } from 'react-redux'
@@ -7,11 +7,13 @@ import AccessoriesCard from '../Dashboard/AccessoriesCard'
 import { LOADING } from '../../Redux/constants/homeConstant'
 import customAxios from '../../CustomAxios'
 import reactotron from 'reactotron-react-native'
+import LoadingContext from '../../context/loading'
 
 
 const SelectedAccessory = ({ navigation, route }) => {
 
     const dispatch = useDispatch();
+    const context = useContext(LoadingContext)
 
     const [datas, setDatas] = useState([])
 
@@ -27,10 +29,7 @@ const SelectedAccessory = ({ navigation, route }) => {
 
     // PRODUCT LIST
 	const getProductList = () => {
-		dispatch({
-			type: LOADING,
-			payload: true
-		})
+		context.setLoading(true)
 		let data = {
             Type: type,
             id: breed,
@@ -43,10 +42,7 @@ const SelectedAccessory = ({ navigation, route }) => {
         
 		customAxios.post(`Front_End/Mob_products/_getproductLists`, data)  
 		.then(async response => {
-			dispatch({
-				type: LOADING,
-				payload: false
-			})
+			context.setLoading(false)
 			setDatas(response?.data)
 			
 		})
@@ -56,6 +52,7 @@ const SelectedAccessory = ({ navigation, route }) => {
 				description: error,
 				backgroundColor: 'error.500'
 			})
+            context.setLoading(false)
 		});
 	}
 

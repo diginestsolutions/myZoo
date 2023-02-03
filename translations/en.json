@@ -432,7 +432,8 @@
         "zip" :"Zip Code",
         "price" :"Price",
         "abtAcc" :"About Accessory",
-        "postItem" :"POST ITEM"
+        "postItem" :"POST ITEM",
+        "editAcc": "Edit Accessory"
     },
 
     "CreateService" : {

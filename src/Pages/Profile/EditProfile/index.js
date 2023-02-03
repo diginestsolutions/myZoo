@@ -1,5 +1,5 @@
 import { StyleSheet, Image } from 'react-native'
-import React, {useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import { Box, ScrollView, useToast,  } from 'native-base'
 import { useForm } from "react-hook-form";
 import Heading from '../../../Components/Heading'
@@ -18,6 +18,8 @@ import { RESET_AUTH } from '../../../Redux/constants/authConstant';
 import reactotron from '../../../ReactotronConfig';
 import {launchImageLibrary} from 'react-native-image-picker';
 import customAxios from '../../../CustomAxios';
+import { IMAGE_URL } from '../../../config/Constants';
+import LoadingContext from '../../../context/loading';
 
 
 
@@ -25,7 +27,9 @@ const EditProfile = ({navigation}) => {
 
     const { t } = useTranslation();
 
-    const [image, setImage] = useState('');
+    const [image, setImage] = useState(null);
+
+    const context = useContext(LoadingContext)
 
 
     const dispatch = useDispatch();
@@ -110,10 +114,7 @@ const EditProfile = ({navigation}) => {
                 name: image.fileName
             }) 
 
-            dispatch({
-                type: LOADING,
-                payload: true
-            })
+            context.setLoading(true)
         
             await customAxios.post(`admin/uploaduser`, formData, {
                 headers: {
@@ -138,10 +139,7 @@ const EditProfile = ({navigation}) => {
                         backgroundColor: "success.500"
                     })
                     dispatch(getUserProfile(userData?.id))
-                    dispatch({
-                        type: LOADING,
-                        payload: false
-                    })
+                    context.setLoading(false)
                     navigation.goBack()
                 })
                 .catch(async error => {
@@ -152,10 +150,7 @@ const EditProfile = ({navigation}) => {
                         backgroundColor: "error.600"
                     })
 
-                    dispatch({
-                        type: LOADING,
-                        payload: false
-                    })
+                    context.setLoading(false)
                 });
             })
             .catch(async error => {
@@ -166,14 +161,38 @@ const EditProfile = ({navigation}) => {
                     backgroundColor: "error.600"
                 })
         
-                dispatch({
-                    type: LOADING,
-                    payload: false
-                })
+                context.setLoading(false)
             });
 
         }
+        else{
+            context.setLoading(true)
+            data._id = userProfile?._id
 
+            data.userId = userData.id
+
+            await customAxios.post(`admin/UserProfile/_save`, data)  
+            .then(async response => {
+                toast.show({
+                    title: "Success",
+                    description: "Profile Updated successfully",
+                    backgroundColor: "success.500"
+                })
+                dispatch(getUserProfile(userData?.id))
+                context.setLoading(false)
+                navigation.goBack()
+            })
+            .catch(async error => {
+
+                toast.show({
+                    title: "Error",
+                    description: error,
+                    backgroundColor: "error.600"
+                })
+
+                context.setLoading(false)
+            });
+        }
         //let images = uploadFile(image)
         //reactotron.log({images})
         // let datas={
@@ -213,8 +232,6 @@ const EditProfile = ({navigation}) => {
 
         const result = await launchImageLibrary(options);
 
-        reactotron.log({result: result.assets[0]})
-
         setImage(result.assets[0])
 
         // ImagePicker.openPicker({
@@ -242,7 +259,7 @@ return (
                 <Image                
 
                     source={{
-                        uri : image ? image?.uri :  userProfile?.Image?.[0]?.UploadedFileName
+                        uri : image ? image?.uri :  `${IMAGE_URL}${userProfile?.Image?.[0]?.UploadedFileName}`
                     }}
                     style={{height:100, width:100,  borderRadius:50}}
                 />

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
-import React, {useEffect} from 'react'
-import { Box, ScrollView, Text, FlatList } from 'native-base'
+import React, {useContext, useEffect, useState} from 'react'
+import { Box, ScrollView, Text, FlatList, useToast } from 'native-base'
 import Header from '../../Components/Header'
 import ChatCard from './ChatCard'
 import Heading from '../../Components/Heading'
@@ -9,6 +9,8 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from 'react-redux'
 import { getChattedUserlist } from '../../Redux/actions/chatAction'
 import reactotron from 'reactotron-react-native'
+import LoadingContext from '../../context/loading'
+import customAxios from '../../CustomAxios'
 
 
 const Chat = ({navigation}) => {
@@ -16,7 +18,12 @@ const Chat = ({navigation}) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { userData } = useSelector(state => state.auth)
-  const { chattedUser, error } = useSelector(state => state.chat)
+  const toast = useToast()
+  //const { chattedUser, error } = useSelector(state => state.chat)
+
+  const [chattedUser, setChattedUser] = useState([])
+
+  const context = useContext(LoadingContext)
 
   //reactotron.log({chattedUser})
 
@@ -25,38 +32,34 @@ const Chat = ({navigation}) => {
   
 
 
-  const datas = [
-    {   id: 1, 
-        time:"12:40 AM",
-        chat:'I want to buy your pet…',           
-        count:'2',
-        name:'Muhammed Raheem'
-    },
-    {   id: 2, 
-        time:"Yesterday",
-        chat:'I want to buy your pet…',           
-        count:'3',
-        name:'Muhammed Raheem'
-
-    },    
-     
-]
-
+  
     useEffect(() => {
+        getChatUsers()
+    }, [])
+
+    const getChatUsers = async() => {
         let data = {
             loggedInUserId: userData?.id,
         }
-        dispatch(getChattedUserlist(data))
-    }, [])
+        context.setLoading(true)
+        await customAxios.post(`api/profile/chat/messages/conversations`, data)  
+        .then(async response => {
+            setChattedUser(response.data.data)
+            context.setLoading(false)
+    
+        })
+        .catch(async error => {
+    
+            toast.show({
+                title: 'Error',
+                description: error,
+                backgroundColor: 'error.500'
+            })
+    
+            context.setLoading(false)
+        });
+    }
 
-    // useEffect(() => {
-    //     if(error){
-    //         toast.show({ title: 'Error', description: error })
-    //         dispatch({
-    //             type: RESET_ERROR
-    //         })
-    //     }
-    // }, [error])
 
 const renderItems = ({item}) => (
     <ChatCard 
@@ -75,6 +78,8 @@ const renderItems = ({item}) => (
                 data={chattedUser ? chattedUser : []}
                 keyExtractor={(item) => item._id}
                 renderItem={renderItems}
+                refreshing={context.loading}
+                onRefresh={getChatUsers}
             />  
             
     </CommonBackground>
