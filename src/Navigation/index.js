@@ -16,7 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import customAxios from '../CustomAxios';
 import { AUTH_INPUT } from '../Redux/constants/authConstant';
 import { navigationRef } from './RootNavigation';
-import Currency from '../Screens/Drawer/Currency';
+import Currency from '../Pages/Currency';
 import { getMyFavourite } from '../Redux/actions/myItemsAction';
 import MemberShipWarning from '../Components/MemberShipWarning';
 import VerifyOtp from '../Pages/Auth/ForgotPassword/VerifyOtp';

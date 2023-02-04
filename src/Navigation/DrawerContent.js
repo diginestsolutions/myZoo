@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import SelectInput from '../Components/SelectInput'
 import { useTranslation } from "react-i18next";
 import Logo from '../Components/Logo'
-import SelectLanguage from '../Screens/Drawer/Language/SelectLanguage'
+import SelectLanguage from '../Pages/Language/SelectLanguage'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { LOGOUT, RESET_USER } from '../Redux/constants/authConstant'
 import ConfirmationModal from '../Components/ConfirmationModal'

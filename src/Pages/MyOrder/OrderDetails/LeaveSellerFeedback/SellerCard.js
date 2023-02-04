@@ -58,7 +58,7 @@ const SellerCard = ({onPress}) => {
                 mx={2.5}
             >
                 <Image 
-                    source={require('../../../../Images/sam.jpg')} 
+                    source={require('../../../../Images/splash.png')} 
                     h={120} alt="image" borderTopRadius={10} 
                 />
                 <Text fontWeight={200} fontFamily={'body'} fontSize={16} mt={2} color='#B4B4B4' ml={2}>{item.title}</Text>   

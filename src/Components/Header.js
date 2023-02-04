@@ -6,7 +6,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import LogoWhite from './LogoWhite'
 import { useDispatch, useSelector } from 'react-redux';
 import { getcartItemCount } from '../Redux/actions/cartAction'
-import Search from '../Screens/Dashboard/Search'
+import Search from '../Pages/Dashboard/Search'
 import reactotron from 'reactotron-react-native'
 import { getFocusedRouteNameFromRoute, useRoute } from '@react-navigation/native'
 import * as RootNavigation from '../Navigation/RootNavigation'

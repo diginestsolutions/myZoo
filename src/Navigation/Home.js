@@ -10,9 +10,9 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 
 //import HomeNav from '../Screens/Dashboard/HomeNav';
-import ChatNav from '../Screens/Chat/ChatNav';
+//import ChatNav from '../Screens/Chat/ChatNav';
 import ListItem from '../Components/ListItem';
-import Filter from '../Screens/Filter';
+import Filter from '../Pages/Filter';
 //import AddPost from '../Screens/AddPost';
 import Header from '../Components/Header';
 import { useRoute } from '@react-navigation/native';
@@ -25,6 +25,7 @@ import customAxios from '../CustomAxios';
 import { LOADING } from '../Redux/constants/homeConstant';
 import { toNumber } from 'lodash';
 import LoadingContext from '../context/loading';
+import ChatNav from './ChatNav';
 
 const Tab = createBottomTabNavigator();
 
