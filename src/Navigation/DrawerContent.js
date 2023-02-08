@@ -39,7 +39,7 @@ const dispatch = useDispatch();
 
 
 const logout = async() =>{
-    navigation.dispatch(DrawerActions.toggleDrawer())
+    
     CommonActions.reset()
 
     navigation.navigate('HomeNav')
@@ -162,7 +162,13 @@ const logout = async() =>{
                 icon={<FontAwesome/>} 
                 iconName='sign-out'
                 // onPress={()=>logout()}
-                onPress={ userData?.id ? ()=>setShowModal(true) : () => navigation.navigate('SignIn')}
+                onPress={ userData?.id ? ()=>{
+                    navigation.dispatch(DrawerActions.toggleDrawer())
+                    setShowModal(true)
+                } : () => {
+                    navigation.dispatch(DrawerActions.toggleDrawer())
+                    navigation.navigate('SignIn')
+                }}
                 mb={8}
             />
 

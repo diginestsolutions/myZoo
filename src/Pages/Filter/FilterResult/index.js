@@ -6,7 +6,7 @@ import Heading from '../../../Components/Heading'
 import Favourite from '../../../Components/Favourite'
 import CommonBackground from '../../../Components/CommonBackground'
 import { useSelector } from 'react-redux'
-import PetsCard from '../../Dashboard/PetsCard'
+import PetsCard from '../../../Components/PetsCard'
 import { IMAGE_URL } from '../../../config/Constants'
 
 const FilterResult = ({navigation}) => {

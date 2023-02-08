@@ -12,22 +12,24 @@ import customAxios from '../../CustomAxios'
 
 
 
-const Pets = ({ label, onPress}) => {
+const Pets = ({ label, datas}) => {
 
     const dispatch = useDispatch();
     const toast = useToast()
 
-    const [latestPets, setLatestPets] = useState([])
+    const [latestPets, setLatestPets] = useState(datas)
 
     const { loading } = useSelector(state => state.home)
     const { userData } = useSelector(state => state.auth)
 
 
 
+   
+
     useEffect(() => {
-       getLatestPets()
+      setLatestPets(datas)
+    }, [datas])
     
-    }, [])
 
 
     const getLatestPets = async () => {
@@ -81,7 +83,7 @@ const Pets = ({ label, onPress}) => {
        {latestPets && latestPets?.length >=1 && <CardTitle label={label}/>}
 
         <FlatList 
-            data={latestPets}
+            data={latestPets ? latestPets : []}
             keyExtractor={(item) => item._id}
             renderItem={renderItems}
             horizontal={true}

@@ -1,10 +1,12 @@
 import { StyleSheet } from 'react-native'
 import React from 'react'
 import { Box, HStack, Text, Pressable, Icon } from 'native-base'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const CommonSingnInButton = ({label, labelColor, icon, ml, onPress }) => {
   return (
-    <Pressable borderWidth={1} borderColor={labelColor} borderRadius={6} mt={3} onPress={onPress}> 
+    <TouchableOpacity onPress={onPress}>
+    <Box borderWidth={1} borderColor={labelColor} borderRadius={6} mt={3} > 
         <HStack alignItems='center' px={4}>
             <Box flex={0.2}>
                 <Icon as={icon} color={labelColor} size={6} ml={ml}/>
@@ -13,7 +15,8 @@ const CommonSingnInButton = ({label, labelColor, icon, ml, onPress }) => {
                 <Text fontWeight={400} fontFamily="body" color={labelColor} fontSize={14} py={3} alignSelf='center'>{label}</Text>
             </Box>
         </HStack>
-    </Pressable>
+    </Box>
+    </TouchableOpacity>
   )
 }
 

@@ -12,12 +12,12 @@ import AccessoriesCard from './AccessoriesCard'
 
 
 
-const LatestServices = ({ label, onPress}) => {
+const LatestServices = ({ label, datas}) => {
 
     const dispatch = useDispatch();
     const toast = useToast()
 
-    const [services, setServices] = useState([])
+    const [services, setServices] = useState(datas)
 
     const { loading } = useSelector(state => state.home)
     const { userData } = useSelector(state => state.auth)
@@ -25,12 +25,9 @@ const LatestServices = ({ label, onPress}) => {
 
 
     useEffect(() => {
-        let data = {
-            countryId : !isEmpty(userData?.Country) ? userData?.Country :  "5fe321d2e9ce6f4494dd8b81"
-        }
-       getLatestServices(data)
+        setServices(datas)
     
-    }, [])
+    }, [datas])
 
 
     const getLatestServices = async (data) => {
@@ -81,7 +78,7 @@ const LatestServices = ({ label, onPress}) => {
        {services && services?.length >=1 && <CardTitle label={label}/>}
 
         <FlatList 
-            data={services}
+            data={services ? services : []}
             keyExtractor={(item) => item._id}
             renderItem={renderItems}
             horizontal={true}

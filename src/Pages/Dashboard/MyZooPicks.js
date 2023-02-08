@@ -10,9 +10,12 @@ import PetsCard from '../../Components/PetsCard'
 import { LOADING } from '../../Redux/constants/homeConstant'
 import { API_URL } from '../../config/Constants'
 import LoadingContext from '../../context/loading'
+import reactotron from 'reactotron-react-native'
 
 
-const MyzooPicks = ({ label, onPress}) => {
+const MyzooPicks = ({ label, datas}) => {
+
+    reactotron.log({datas})
 
     const dispatch = useDispatch();
     const toast = useToast()
@@ -21,25 +24,23 @@ const MyzooPicks = ({ label, onPress}) => {
 
 
 
-    const [myZooPicks, setMyZooPicks] = useState([])
+    const [data, setData] = useState([])
 
     const {loading } = useSelector(state => state.home)
     const { userData } = useSelector(state => state.auth)
 
 
-
-
     useEffect(() => {
-        
-        getMyZooPicks()
-        
-    }, [])
+        setData(datas)
+    }, [datas])
+    
 
-    useEffect(() => {
-        if(userData?.Country){
-            getMyZooPicks()
-        }
-    }, [userData?.Country])
+
+
+
+   
+
+    
 
 
     const getMyZooPicks = async() => {
@@ -72,14 +73,14 @@ const MyzooPicks = ({ label, onPress}) => {
     }
 
 
-    useEffect(() => {
-        if(userData?.Country){
-            let data = {
-                countryId : !isEmpty(userData?.Country) ? userData?.Country : "5fe321d2e9ce6f4494dd8b81"
-            }
-            getMyZooPicks(data)
-        }
-    }, [userData?.Country])
+    // useEffect(() => {
+    //     if(userData?.Country){
+    //         let data = {
+    //             countryId : !isEmpty(userData?.Country) ? userData?.Country : "5fe321d2e9ce6f4494dd8b81"
+    //         }
+    //         getMyZooPicks(data)
+    //     }
+    // }, [userData?.Country])
     
       
     
@@ -96,7 +97,7 @@ const MyzooPicks = ({ label, onPress}) => {
         />
     )
 
-if(!myZooPicks || myZooPicks.length === 0){
+if(!datas || datas.length === 0){
     return null
 }
 
@@ -110,7 +111,7 @@ if(loading){
         <CardTitle label={label}/>
 
         <FlatList 
-            data={myZooPicks}
+            data={data}
             keyExtractor={(item) => item._id}
             renderItem={renderItems}
             horizontal={true}

@@ -60,8 +60,6 @@ export  const authReducer = (state = { }, action) => {
             return {
                 ...state,
                 userData: action.payload,  
-                loginSuccess: true,
-                loading: false,
                                
             }
         case LOGIN_FAIL:

@@ -37,6 +37,7 @@ import ReturnRequest from '../Pages/MyOrder/OrderDetails/ReturnRequest';
 import OrderSuccess from '../Pages/Cart/Payment/PlaceOrder/OrderSuccess';
 import EditItem from '../Pages/AddPost/EditItem';
 import EditAccessory from '../Pages/AddPost/EditAccessory';
+import FilterResult from '../Pages/Filter/FilterResult';
 // import ServiceSubCategory from './Services/ServiceSubCategory';
 // import MyOrder from '../Drawer/MyOrder';
 // import Cart from '../Cart';
@@ -63,7 +64,6 @@ import EditAccessory from '../Pages/AddPost/EditAccessory';
 // import SelectedAccessory from './Categories/BrowseCategories/Accessories/SelectedAccessory';
 // import Payment from '../Cart/Payment';
 // import VendorProfile from './Vendors/VendorProfile';
-// import FilterResult from '../Filter/FilterResult';
 // import Filter from '../Filter';
 // import PostNewItem from '../AddPost/PostNewItem';
 // import CreateAccessory from '../AddPost/CreateAccessory';
@@ -140,6 +140,7 @@ const HomeNav = () => {
 
         <Stack.Screen name="BrowseCategories" component={Categories}/>
         <Stack.Screen name="petsDetails" component={PetsDetails}/>
+        <Stack.Screen name="FilterResult" component={FilterResult}/>
         {/* <Stack.Screen name="SubService" component={SubService}/>
         <Stack.Screen name="SelectedPet" component={SelectedPet}/>
         <Stack.Screen name="SelectedAccessory" component={SelectedAccessory}/>

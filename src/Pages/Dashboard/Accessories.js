@@ -11,26 +11,21 @@ import { LOADING } from '../../Redux/constants/homeConstant'
 import customAxios from '../../CustomAxios'
 
 
-const Accessories = ({label}) => {
+const Accessories = ({label, datas}) => {
 
     const dispatch = useDispatch();
     const toast = useToast()
 
-    const [accessoryArray, setAccessoryArray] = useState([])
+    const [accessoryArray, setAccessoryArray] = useState(datas)
 
     const { loading } = useSelector(state => state.home)
     const { userData } = useSelector(state => state.auth)
 
-    useEffect(() => {
-        getLatestAccessories()
-        
-    }, [])
+   
 
     useEffect(() => {
-        if(userData?.Country){
-            getLatestAccessories()
-        }
-    }, [userData?.Country])
+       setAccessoryArray(datas)
+    }, [datas])
 
     const getLatestAccessories = async() => {
 
@@ -86,7 +81,7 @@ const Accessories = ({label}) => {
     <>
         <CardTitle label={label}/>
         <FlatList 
-            data={accessoryArray}
+            data={accessoryArray ? accessoryArray : []}
             keyExtractor={(item) => item._id}
             renderItem={renderItems}
             horizontal={true}

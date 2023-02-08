@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { Platform, StyleSheet } from 'react-native'
 import React, { useState, useEffect, useContext } from 'react'
 import { Box, HStack, StatusBar, Spinner, CheckIcon, useToast, } from 'native-base'
 import CommonInput from '../../../Components/CommonInput'
@@ -17,7 +17,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from "react-hook-form";
-import { RESET_AUTH } from '../../../Redux/constants/authConstant'
+import { LOGIN_SUCCESS, RESET_AUTH } from '../../../Redux/constants/authConstant'
 import { loginUser } from '../../../Redux/actions/authAction'
 import { useTranslation } from "react-i18next";
 import { getDashboardDatas } from '../../../Redux/actions/homeAction'
@@ -31,12 +31,16 @@ import {
     GraphRequestManager,
     LoginManager,
 } from 'react-native-fbsdk';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 const SignIn = ({ navigation }) => {
 
     const { t } = useTranslation();
-    GoogleSignin.configure();
+    GoogleSignin.configure({
+        androidClientId: '320961589099-k3h8cghg1p9bbcq1ltlp6lhv4usc1edk.apps.googleusercontent.com',
+        iosClientId: '320961589099-3de76mbfl16234ie2g45iat15sbls72u.apps.googleusercontent.com',
+    });
 
     const dispatch = useDispatch();
     const toast = useToast()
@@ -71,8 +75,19 @@ const SignIn = ({ navigation }) => {
         let data = {
             "tokenId": userInfo?.idToken
         }
-        await customAxios.post(`/mobileapp/googleAuth`, data)
+
+        let url = Platform.OS === 'android' ? '/mobileapp/googleAuthrnp' : 'mobileapp/googleAuthrnios'
+        await customAxios.post(url, data)
             .then(async response => {
+                dispatch({
+                    type: LOGIN_SUCCESS,
+                    payload: response?.data
+                })  
+                        
+                await AsyncStorage.setItem("user", JSON.stringify(response?.data))
+        
+                await AsyncStorage.setItem("token", response?.data?.token)  
+                navigation.navigate('Menu')
                 context.setLoading(false)
             })
             .catch(async error => {
@@ -123,7 +138,7 @@ const SignIn = ({ navigation }) => {
                 title: 'Success',
                 description: "Login Success"
             })
-            dispatch(getDashboardDatas(userData?.Country))
+            //dispatch(getDashboardDatas(userData?.Country))
 
             dispatch({
                 type: RESET_AUTH
@@ -143,11 +158,33 @@ const SignIn = ({ navigation }) => {
         resolver: yupResolver(schema)
     });
 
-    const onSubmit = data => {
+    const onSubmit = async (data) => {
+        context.setLoading(true)
         let datas = {
             ...data
         }
-        dispatch(loginUser(data))
+        await customAxios.post(`Login`, datas)
+        .then(async response => {
+    
+            dispatch({
+                type: LOGIN_SUCCESS,
+                payload: response?.data
+            })  
+                    
+            await AsyncStorage.setItem("user", JSON.stringify(response?.data))
+    
+            await AsyncStorage.setItem("token", response?.data?.token)  
+            navigation.navigate('Menu')
+            context.setLoading(false)
+        })
+        .catch(async error => {
+            context.setLoading(false)
+            toast.show({
+                title: 'Error',
+                description: error,
+                backgroundColor: 'error.500'
+            })
+        })
     };
 
     return (

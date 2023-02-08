@@ -1,11 +1,11 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { Text, Pressable, Box } from 'native-base'
 
 
 const CommonButton = ({label, onPress, mt, bg}) => {
   return (
-    <Pressable onPress={onPress} mt={mt}>    
+    <TouchableOpacity onPress={onPress} style={{ marginTop: mt }}>    
       <Box 
           bg={bg ? bg :{
             linearGradient: {
@@ -21,7 +21,7 @@ const CommonButton = ({label, onPress, mt, bg}) => {
       >
           <Text fontWeight={400} fontFamily="body" color='#FFFFFF' fontSize={15} py={3}>{label}</Text>
       </Box>
-    </Pressable>
+    </TouchableOpacity>
   )
 }
 
